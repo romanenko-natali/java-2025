@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Java Course Repository
 
 ## Domains
@@ -221,4 +222,4 @@
 
 **For the second lab:** Convert Customer and Supplier to `record`. Add enums:
 - `ItemStatus { IN_STOCK, OUT_OF_STOCK, DISCONTINUED }`
-- `PurchaseStatus { PENDING, COMPLETED, RETURNED }`  
+- `PurchaseStatus { PENDING, COMPLETED, RETURNED }`
