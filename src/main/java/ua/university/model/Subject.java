@@ -2,68 +2,59 @@ package ua.university.model;
 
 import ua.university.util.SubjectUtils;
 
-import java.util.Objects;
 
-public class Subject {
-    private String name;
-    private int credits;
+public record Subject(
+        String name,
+        int credits,
+        String department,
+        boolean isCore
+) {
+    public Subject {
+        // Fail fast - показуємо всі помилки відразу
+        if (!SubjectUtils.isValidName(name)) {
+            System.out.println("❌ ПОМИЛКА Subject: некоректна назва '" + name + "'");
+        }
+        if (!SubjectUtils.isValidCredit(credits)) {
+            System.out.println("❌ ПОМИЛКА Subject: некоректна кількість кредитів " + credits + " (має бути 1-5)");
+        }
+        if (department == null || department.trim().isEmpty()) {
+            System.out.println("❌ ПОМИЛКА Subject: відсутня або порожня назва факультету");
+        }
 
-    public Subject() {
-    }
+        // Мінімальне очищення
+        if (name != null) {
+            name = name.trim();
+        }
+        if (department != null) {
+            department = department.trim();
+        }
 
-    public Subject(String name, int credits) {
-        setName(name);
-        setCredits(credits);
-    }
+        boolean hasCriticalErrors = !SubjectUtils.isValidName(name) ||
+                !SubjectUtils.isValidCredit(credits) ||
+                department == null || department.trim().isEmpty();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        if (SubjectUtils.isValidName(name)) {
-            this.name = name;
+        if (hasCriticalErrors) {
+            System.out.println("⚠️  Subject створений з помилками - перевірте дані!");
         }
     }
 
-    public int getCredits() {
-        return credits;
+    public String getUkrainianName() {
+        return name != null ? name : "Невідомий предмет";
     }
 
-    public void setCredits(int credits) {
-        if (SubjectUtils.isValidCredit(credits)) {
-            this.credits = credits;
+    public String getDifficultyLevel() {
+        if (credits < 1 || credits > 5) {
+            System.out.println("⚠️  Неможливо визначити складність - некоректні кредити: " + credits);
+            return "Невідома складність";
         }
+
+        return switch (credits) {
+            case 1, 2 -> "Легкий";
+            case 3, 4 -> "Середній";
+            case 5 -> "Складний";
+            default -> "Невідома складність"; // Never reached, but for safety
+        };
     }
 
-    public static Subject createSubject(String name, int credits) {
-        if (SubjectUtils.isValidName(name) &&
-                SubjectUtils.isValidCredit(credits)) {
-            return new Subject(name, credits);
-        }
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        return "Subject{" +
-                "name='" + name + '\'' +
-                ", credits=" + credits +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Subject subject = (Subject) o;
-        return credits == subject.credits &&
-                Objects.equals(name, subject.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, credits);
-    }
 }
 

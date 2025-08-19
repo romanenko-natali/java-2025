@@ -25,6 +25,6 @@ public class GroupUtils {
     }
 
     public static String formatGroupFullNumber(Group group){
-        return group.getSpecialty().substring(0, 2).toUpperCase() + group.getGNumber() + "-" + group.getStartYear() % 100;
+        return group.specialty().substring(0, 2).toUpperCase() + group.number() + "-" + group.startYear() % 100;
     }
 }

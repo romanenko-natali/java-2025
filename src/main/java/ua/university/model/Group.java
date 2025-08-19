@@ -3,95 +3,68 @@ package ua.university.model;
 import ua.university.util.GroupUtils;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
-public class Group {
-    private int number;
-    private String specialty;
-    private int startYear;
+public record Group(
+        int number,
+        String specialty,
+        int startYear,
+        int studentsCount
+) {
+    public Group {
+        // Fail fast - показуємо помилки, але не зупиняємо програму
+        if (!GroupUtils.isValidSpecialty(specialty)) {
+            System.out.println("❌ ПОМИЛКА Group: некоректна спеціальність '" + specialty + "'");
+        }
+        if (!GroupUtils.isValidStartYear(startYear)) {
+            System.out.println("❌ ПОМИЛКА Group: некоректний рік початку " + startYear);
+        }
+        if (studentsCount < 0 || studentsCount > 35) {
+            System.out.println("❌ ПОМИЛКА Group: некоректна кількість студентів " + studentsCount + " (має бути 0-35)");
+        }
+        if (number <= 0) {
+            System.out.println("❌ ПОМИЛКА Group: номер групи має бути додатнім, отримано " + number);
+        }
 
-    public Group() {
+        if (specialty != null) {
+            specialty = specialty.trim();
+        }
+
+        boolean hasCriticalErrors = !GroupUtils.isValidSpecialty(specialty) ||
+                !GroupUtils.isValidStartYear(startYear) ||
+                studentsCount < 0 || studentsCount > 35 ||
+                number <= 0;
+
+        if (hasCriticalErrors) {
+            System.out.println("⚠️  Group створена з помилками - перевірте дані!");
+        }
     }
 
-    public Group(int number, String specialty, int startYear) {
-        setNumber(number);
-        setSpecialty(specialty);
-        setStartYear(startYear);
+    public int getCurrentYear() {
+        return LocalDate.now().getYear() - startYear + 1;
     }
 
-    public Group(int number, String specialty) {
-        this(number, specialty, LocalDate.now().getYear());
+    public String getFullName() {
+        // Захищаємося від NPE, але не приховуємо помилку
+        if (specialty == null || specialty.length() < 2) {
+            System.out.println("⚠️  Неможливо створити повну назву - некоректна спеціальність");
+            return "ERROR-" + number + "-" + (startYear % 100);
+        }
+        return specialty.substring(0, 2).toUpperCase() + number + "-" + (startYear % 100);
     }
 
-    public int getGNumber() {
-        return number;
+    public boolean isGraduated() {
+        return getCurrentYear() > 4;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public String groupInfo() {
+        return getFullName();
     }
 
     public String getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(String specialty) {
-        if (GroupUtils.isValidSpecialty(specialty)) {
-            this.specialty = specialty;
-        }
-    }
-
     public int getStartYear() {
         return startYear;
-    }
-
-    public void setStartYear(int startYear) {
-        if (GroupUtils.isValidStartYear(startYear)) {
-            this.startYear = startYear;
-        }
-    }
-
-    public int getCurrentCourse() {
-        return LocalDate.now().getYear() - startYear + 1;
-    }
-
-    public static Group createGroup(int number, String specialty, int startYear) {
-        if (GroupUtils.isValidSpecialty(specialty) && GroupUtils.isValidStartYear(startYear)) {
-            return new Group(number, specialty, startYear);
-        }
-        return null;
-    }
-
-    public static Group createGroup(int number, String specialty){
-        return createGroup(number, specialty, LocalDate.now().getYear());
-    }
-
-    public String groupInfo() {
-        return GroupUtils.formatGroupFullNumber(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Group{" +
-                "groupNumber=" + number +
-                ", specialty='" + specialty + '\'' +
-                ", startYear=" + startYear +
-                ", currentCourse=" + getCurrentCourse() +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Group group = (Group) o;
-        return startYear == group.startYear &&
-                Objects.equals(number, group.number) &&
-                Objects.equals(specialty, group.specialty);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(number, specialty, startYear);
     }
 }
