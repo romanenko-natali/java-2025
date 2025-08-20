@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - '*lab'
-  workflow_dispatch:  # <-- this enables manual triggering
+  workflow_dispatch:  
 
 jobs:
   test:
