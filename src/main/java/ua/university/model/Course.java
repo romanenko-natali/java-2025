@@ -51,10 +51,10 @@ public class Course {
 
     public String getCourseInfo() {
         return String.format("Course: %s | Teacher: %s | Group: %s | Credits: %d",
-                subject.getName(),
+                subject.name(),
                 PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()),
                 group.groupInfo(),
-                subject.getCredits());
+                subject.credits());
     }
 
     @Override

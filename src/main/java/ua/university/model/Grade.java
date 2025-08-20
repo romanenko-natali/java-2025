@@ -2,10 +2,11 @@ package ua.university.model;
 
 public enum Grade {
     A(90, 100, 4.0, "Відмінно"),
-    B(82, 89, 3.0, "Добре"),
-    C(74, 81, 2.0, "Задовільно"),
-    D(64, 73, 1.0, "Задовільно"),
-    F(0, 63, 0.0, "Незадовільно");
+    B(80, 89, 3.0, "Добре+"),
+    C(70, 79, 2.0, "Добре"),
+    D(60, 69, 1.0, "Задовільно"),
+    E(50, 59, 1.0, "Задовільно-"),
+    F(0, 49, 0.0, "Незадовільно");
 
     private final int minPoints;
     private final int maxPoints;
@@ -45,17 +46,17 @@ public enum Grade {
                 return grade;
             }
         }
-        return F; // fallback
+        return F;
     }
 
-    public static Grade fromUkrainianGrade(int ukrainianGrade) {
-        return switch (ukrainianGrade) {
-            case 5 -> A;
-            case 4 -> B;
-            case 3 -> C;
-            case 2 -> D;
-            case 1 -> F;
-            default -> F;
+    public static int toUkrainianGrade(Grade grade) {
+        return switch (grade) {
+            case A -> 5;
+            case B -> 4;
+            case C -> 4;
+            case D -> 3;
+            case E -> 3;
+            default -> 2;
         };
     }
 

@@ -11,7 +11,6 @@ public record Group(
         int studentsCount
 ) {
     public Group {
-        // Fail fast - показуємо помилки, але не зупиняємо програму
         if (!GroupUtils.isValidSpecialty(specialty)) {
             System.out.println("❌ ПОМИЛКА Group: некоректна спеціальність '" + specialty + "'");
         }
@@ -44,7 +43,6 @@ public record Group(
     }
 
     public String getFullName() {
-        // Захищаємося від NPE, але не приховуємо помилку
         if (specialty == null || specialty.length() < 2) {
             System.out.println("⚠️  Неможливо створити повну назву - некоректна спеціальність");
             return "ERROR-" + number + "-" + (startYear % 100);

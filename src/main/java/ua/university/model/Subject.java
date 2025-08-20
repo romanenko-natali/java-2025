@@ -10,7 +10,6 @@ public record Subject(
         boolean isCore
 ) {
     public Subject {
-        // Fail fast - показуємо всі помилки відразу
         if (!SubjectUtils.isValidName(name)) {
             System.out.println("❌ ПОМИЛКА Subject: некоректна назва '" + name + "'");
         }
@@ -21,7 +20,6 @@ public record Subject(
             System.out.println("❌ ПОМИЛКА Subject: відсутня або порожня назва факультету");
         }
 
-        // Мінімальне очищення
         if (name != null) {
             name = name.trim();
         }
@@ -52,7 +50,7 @@ public record Subject(
             case 1, 2 -> "Легкий";
             case 3, 4 -> "Середній";
             case 5 -> "Складний";
-            default -> "Невідома складність"; // Never reached, but for safety
+            default -> "Невідома складність";
         };
     }
 
