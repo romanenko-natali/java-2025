@@ -5,52 +5,39 @@ import ua.university.util.SubjectUtils;
 
 public record Subject(
         String name,
-        int credits,
-        String department,
-        boolean isCore
+        int credits
 ) {
     public Subject {
         if (!SubjectUtils.isValidName(name)) {
-            System.out.println("❌ ПОМИЛКА Subject: некоректна назва '" + name + "'");
+            System.out.println("❌ Error when create Subject: incorrect name '" + name + "'");
         }
         if (!SubjectUtils.isValidCredit(credits)) {
-            System.out.println("❌ ПОМИЛКА Subject: некоректна кількість кредитів " + credits + " (має бути 1-5)");
-        }
-        if (department == null || department.trim().isEmpty()) {
-            System.out.println("❌ ПОМИЛКА Subject: відсутня або порожня назва факультету");
+            System.out.println("❌ Error when create Subject: incorrect credit amount  " + credits + " (must be 1-5)");
         }
 
         if (name != null) {
             name = name.trim();
         }
-        if (department != null) {
-            department = department.trim();
-        }
 
         boolean hasCriticalErrors = !SubjectUtils.isValidName(name) ||
-                !SubjectUtils.isValidCredit(credits) ||
-                department == null || department.trim().isEmpty();
+                !SubjectUtils.isValidCredit(credits);
 
         if (hasCriticalErrors) {
-            System.out.println("⚠️  Subject створений з помилками - перевірте дані!");
+            System.out.println("⚠️  Subject was created with error!");
         }
-    }
-
-    public String getUkrainianName() {
-        return name != null ? name : "Невідомий предмет";
     }
 
     public String getDifficultyLevel() {
         if (credits < 1 || credits > 5) {
-            System.out.println("⚠️  Неможливо визначити складність - некоректні кредити: " + credits);
-            return "Невідома складність";
+            System.out.println("⚠️  Invalid value of credits: " + credits);
+            return "Unknown difficulty";
         }
 
         return switch (credits) {
-            case 1, 2 -> "Легкий";
-            case 3, 4 -> "Середній";
-            case 5 -> "Складний";
-            default -> "Невідома складність";
+            case 1, 2 -> "Easy";
+            case 3, 4 -> "Medium";
+            case 5 -> "Hard";
+            default -> "Unknown";
         };
     }
 
