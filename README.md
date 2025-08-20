@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Java Course Repository
 
 ## Domains
