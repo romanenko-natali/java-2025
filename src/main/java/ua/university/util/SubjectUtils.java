@@ -1,9 +1,5 @@
 package ua.university.util;
 
-import ua.university.model.Group;
-
-import java.time.LocalDate;
-
 public class SubjectUtils {
 
     private SubjectUtils() {

@@ -1,5 +1,9 @@
 package ua.university.model;
 
+import ua.university.exception.InvalidDataException;
+
+import java.util.logging.Logger;
+
 public enum Grade {
     A(90, 100, 4.0, "Відмінно"),
     B(80, 89, 3.0, "Добре+"),
@@ -7,6 +11,8 @@ public enum Grade {
     D(60, 69, 1.0, "Задовільно"),
     E(50, 59, 1.0, "Задовільно-"),
     F(0, 49, 0.0, "Незадовільно");
+
+    private static final Logger logger = Logger.getLogger(ExamType.class.getName());
 
     private final int minPoints;
     private final int maxPoints;
@@ -60,14 +66,22 @@ public enum Grade {
         };
     }
 
-    public static Grade parseGrade(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return F;
+    public static Grade parseGrade(String value) throws InvalidDataException {
+        logger.info("Attempting to parse Grade from value: " + value);
+
+        if (value == null) {
+            logger.warning("Attempted to parse null Grade value");
+            throw new InvalidDataException("Grade value cannot be null");
         }
+
         try {
-            return Grade.valueOf(value.toUpperCase().trim());
+            Grade result = Grade.valueOf(value.toUpperCase().trim());
+            logger.info("Successfully parsed Grade: " + result.name());
+            return result;
         } catch (IllegalArgumentException e) {
-            return F;
+            logger.severe("Failed to parse Grade: '" + value + "' - invalid value");
+            throw new InvalidDataException("Invalid Grade: '" + value + "'. Should be one of: " +
+                    java.util.Arrays.toString(Grade.values()) + ", but received: " + value, e);
         }
     }
 }

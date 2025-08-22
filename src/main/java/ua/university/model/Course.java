@@ -1,5 +1,6 @@
 package ua.university.model;
 
+import ua.university.exception.InvalidDataException;
 import ua.university.util.PersonUtils;
 
 import java.util.Objects;
@@ -43,10 +44,10 @@ public class Course {
     }
 
     public static Course createCourse(Subject subject, Teacher teacher, Group group) {
-        if (subject != null && teacher != null && group != null) {
-            return new Course(subject, teacher, group);
+        if (subject == null || teacher == null || group == null) {
+            throw new InvalidDataException("None of the objects (subject, teacher, or group) should be null.");
         }
-        return null;
+        return new Course(subject, teacher, group);
     }
 
     public String getCourseInfo() {

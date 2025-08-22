@@ -11,7 +11,7 @@ public class Main {
         Teacher teacher1 = new Teacher("Іван", "Петренко", "math@univ.edu", "Математичний", "Доцент");
         Teacher teacher2 = new Teacher("Марія", "Сидоренко", "phys@univ.edu", "Фізичний", "Професор");
 
-        Group cs101 = new Group(101, "Computer Science", 2023, 30);
+        Group cs101 = new Group(101, "Computer Science", 2023);
 
         Student student1 = new Student("Олексій", "Іванов", "alex@univ.edu", "ST001", cs101);
         Student student2 = new Student("Анна", "Коваль", "anna@univ.edu", "ST002", cs101);
