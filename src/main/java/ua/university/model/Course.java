@@ -58,6 +58,12 @@ public class Course {
                 subject.credits());
     }
 
+    public String getIdentity(){
+        return subject.name() + "-" +
+        PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()) + "-" +
+                group.groupInfo();
+    }
+
     @Override
     public String toString() {
         return "Course{" +

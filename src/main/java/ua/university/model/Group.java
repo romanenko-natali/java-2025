@@ -48,12 +48,6 @@ public record Group(
     }
 
     public String getFullName() {
-        if (specialty == null || specialty.length() < 2) {
-            String errorMsg = "Cannot create full name - invalid specialty: " + specialty;
-            logger.log(Level.WARNING, errorMsg);
-            throw new InvalidDataException(errorMsg);
-        }
-
         String fullName = specialty.substring(0, 2).toUpperCase() + number + "-" + (startYear % 100);
         logger.log(Level.FINE, "Generated full name: {0}", fullName);
         return fullName;
