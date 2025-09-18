@@ -27,6 +27,10 @@ public record Subject(
         }
     }
 
+    public Subject(){
+        this(null, 0);
+    }
+
     public String getDifficultyLevel() {
         if (credits < 1 || credits > 5) {
             System.out.println("⚠️  Invalid value of credits: " + credits);

@@ -6,8 +6,7 @@ import java.time.LocalDate;
 public record Group(
         int number,
         String specialty,
-        int startYear,
-        int studentsCount
+        int startYear
 ) {
     public Group {
         if (!GroupUtils.isValidSpecialty(specialty)) {
@@ -15,9 +14,6 @@ public record Group(
         }
         if (!GroupUtils.isValidStartYear(startYear)) {
             System.out.println("❌ ERROR Group: invalid start year " + startYear);
-        }
-        if (studentsCount < 0 || studentsCount > 35) {
-            System.out.println("❌ ERROR Group: invalid number of students " + studentsCount + " (must be 0-35)");
         }
         if (number <= 0) {
             System.out.println("❌ ERROR Group: group number must be positive, got " + number);
@@ -29,7 +25,6 @@ public record Group(
 
         boolean hasCriticalErrors = !GroupUtils.isValidSpecialty(specialty) ||
                 !GroupUtils.isValidStartYear(startYear) ||
-                studentsCount < 0 || studentsCount > 35 ||
                 number <= 0;
 
         if (hasCriticalErrors) {
@@ -41,12 +36,8 @@ public record Group(
         return LocalDate.now().getYear() - startYear + 1;
     }
 
-    public String getFullName() {
-        if (specialty == null || specialty.length() < 2) {
-            System.out.println("⚠️  Cannot create full name – invalid specialty");
-            return "ERROR-" + number + "-" + (startYear % 100);
-        }
-        return specialty.substring(0, 2).toUpperCase() + number + "-" + (startYear % 100);
+    public String fullName() {
+        return specialty.substring(0, 2).toUpperCase() + "-" + number + "-" + (startYear % 100);
     }
 
     public boolean isGraduated() {
@@ -54,7 +45,7 @@ public record Group(
     }
 
     public String groupInfo() {
-        return getFullName();
+        return fullName();
     }
 
     public String getSpecialty() {
@@ -64,4 +55,5 @@ public record Group(
     public int getStartYear() {
         return startYear;
     }
+
 }

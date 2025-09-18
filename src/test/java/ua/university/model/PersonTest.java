@@ -68,7 +68,7 @@ class PersonTest {
         @Test
         @DisplayName("getFullName method should be protected")
         void testGetFullNameIsProtected() throws NoSuchMethodException {
-            Method method = Person.class.getDeclaredMethod("getFullName");
+            Method method = Person.class.getDeclaredMethod("fullName");
             assertTrue(Modifier.isProtected(method.getModifiers()),
                     "Expected getFullName method to be protected, but was: " + Modifier.toString(method.getModifiers()));
         }
@@ -96,7 +96,7 @@ class PersonTest {
             person.setLastName("Doe");
 
             // Use reflection to access protected method
-            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
+            Method getFullNameMethod = Person.class.getDeclaredMethod("fullName");
             getFullNameMethod.setAccessible(true);
             String actualFullName = (String) getFullNameMethod.invoke(person);
 
@@ -111,7 +111,7 @@ class PersonTest {
             // firstName remains null (not set)
             person.setLastName("Wilson");
 
-            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
+            Method getFullNameMethod = Person.class.getDeclaredMethod("fullName");
             getFullNameMethod.setAccessible(true);
             String actualFullName = (String) getFullNameMethod.invoke(person);
 
@@ -126,7 +126,7 @@ class PersonTest {
             person.setFirstName("Bob");
             // lastName remains null (not set)
 
-            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
+            Method getFullNameMethod = Person.class.getDeclaredMethod("fullName");
             getFullNameMethod.setAccessible(true);
             String actualFullName = (String) getFullNameMethod.invoke(person);
 
@@ -140,7 +140,7 @@ class PersonTest {
             Person person = new Person();
             // Both names remain null (not set)
 
-            Method getFullNameMethod = Person.class.getDeclaredMethod("getFullName");
+            Method getFullNameMethod = Person.class.getDeclaredMethod("fullName");
             getFullNameMethod.setAccessible(true);
             String actualFullName = (String) getFullNameMethod.invoke(person);
 

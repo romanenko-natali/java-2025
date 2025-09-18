@@ -38,8 +38,8 @@ public class Student extends Person {
     }
 
     @Override
-    protected String getFullName() {
-        return super.getFullName() + " (Student ID: " + studentId + ")";
+    protected String fullName() {
+        return super.fullName() + " (Student ID: " + studentId + ")";
     }
 
     public static Student createStudent(String firstName, String lastName,

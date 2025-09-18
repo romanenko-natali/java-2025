@@ -39,8 +39,8 @@ public class Teacher extends Person {
     }
 
     @Override
-    protected String getFullName() {
-        return super.getFullName() + " (" + position + ")";
+    protected String fullName() {
+        return super.fullName() + " (" + position + ")";
     }
 
     public static Teacher createTeacher(String firstName, String lastName,

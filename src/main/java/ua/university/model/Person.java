@@ -18,7 +18,7 @@ public class Person {
         setEmail(email);
     }
 
-    protected String getFullName() {
+    protected String fullName() {
         return PersonUtils.formatName(firstName, lastName);
     }
 

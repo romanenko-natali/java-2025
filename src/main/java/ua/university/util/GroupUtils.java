@@ -17,7 +17,7 @@ public class GroupUtils {
     }
 
     public static boolean isValidSpecialty(String specialty){
-        return ValidationHelper.isStringLengthBetween(specialty, 1, 100);
+        return ValidationHelper.isStringLengthBetween(specialty, 2, 100);
     }
 
     public static boolean isValidStartYear(int year){
