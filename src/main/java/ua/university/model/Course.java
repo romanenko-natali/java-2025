@@ -5,7 +5,7 @@ import ua.university.util.PersonUtils;
 
 import java.util.Objects;
 
-public class Course {
+public class Course implements Comparable<Course> {
     private Subject subject;
     private Teacher teacher;
     private Group group;
@@ -87,4 +87,21 @@ public class Course {
     public int hashCode() {
         return Objects.hash(subject, teacher, group);
     }
+
+    @Override
+
+    public int compareTo(Course other) {
+        int subjectComparison = this.getSubject().name().compareTo(other.getSubject().name());
+        if (subjectComparison != 0) {
+            return subjectComparison;
+        }
+
+        int teacherComparison = this.getTeacher().getFullName().compareTo(other.getTeacher().getFullName());
+        if (teacherComparison != 0) {
+            return teacherComparison;
+        }
+
+        return this.getGroup().getFullName().compareTo(other.getGroup().getFullName());
+    }
 }
+

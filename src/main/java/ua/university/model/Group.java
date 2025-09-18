@@ -1,4 +1,5 @@
 package ua.university.model;
+
 import ua.university.exception.InvalidDataException;
 import ua.university.util.GroupUtils;
 
@@ -10,7 +11,7 @@ public record Group(
         int number,
         String specialty,
         int startYear
-) {
+) implements Comparable<Group> {
     private static final Logger logger = Logger.getLogger(Group.class.getName());
 
     public Group {
@@ -62,5 +63,10 @@ public record Group(
 
     public String groupInfo() {
         return getFullName();
+    }
+
+    @Override
+    public int compareTo(Group o) {
+        return this.getFullName().compareTo(o.getFullName());
     }
 }

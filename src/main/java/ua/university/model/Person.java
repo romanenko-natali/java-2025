@@ -4,7 +4,7 @@ import ua.university.util.PersonUtils;
 
 import java.util.Objects;
 
-public class Person {
+public class Person implements Comparable<Person> {
     protected String firstName;
     protected String lastName;
     protected String email;
@@ -87,5 +87,16 @@ public class Person {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, email);
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        int compareFirstName = firstName.compareTo(o.getFirstName());
+        if (compareFirstName != 0) return compareFirstName;
+
+        int compareLastName = lastName.compareTo(o.getLastName());
+        if (compareLastName != 0) return compareLastName;
+
+        return email.compareTo(o.getEmail());
     }
 }

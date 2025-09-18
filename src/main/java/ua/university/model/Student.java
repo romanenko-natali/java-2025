@@ -3,13 +3,16 @@ package ua.university.model;
 import ua.university.util.PersonUtils;
 import ua.university.util.StudentUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class Student extends Person {
     private String studentId;
     private Group group;
 
-    public Student() {
+    private Student() {
         super();
     }
 
@@ -18,6 +21,17 @@ public class Student extends Person {
         setStudentId(studentId);
         this.group = group;
     }
+
+    public Student(String firstName, String lastName, String studentId, Group group) {
+        super();
+        Person p = Person.createPerson(firstName, lastName);
+        this.firstName = p.getFirstName();
+        this.lastName = p.getLastName();
+        this.email = p.getEmail();
+        setStudentId(studentId);
+        this.group = group;
+    }
+
 
     public String getStudentId() {
         return studentId;
@@ -79,4 +93,15 @@ public class Student extends Person {
     public int hashCode() {
         return Objects.hash(super.hashCode(), studentId, group);
     }
+
+    public static void main(String[] args) {
+        Student st1 = new Student("FN2", "LN2", "STD001", null);
+        Student st2 = new Student("FN1", "LN2", "STD002", null);
+
+        List<Student> students = new ArrayList<>(List.of(st1, st2));
+        Collections.sort(students);
+        System.out.println(students);
+
+    }
+
 }
