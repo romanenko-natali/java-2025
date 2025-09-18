@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static ua.university.util.GroupUtils.validateSpecialty;
+import static ua.university.util.GroupUtils.validateStartYear;
+
 public record Group(
         int number,
         String specialty,
@@ -20,21 +23,22 @@ public record Group(
 
         if (number <= 0) {
             String errorMsg = "Group number must be positive, got: " + number;
-            logger.log(Level.SEVERE, errorMsg);
             throw new InvalidDataException(errorMsg);
         }
 
-        if (!GroupUtils.isValidSpecialty(specialty)) {
-            String errorMsg = "Invalid specialty: '" + specialty + "'";
-            logger.log(Level.SEVERE, errorMsg);
-            throw new InvalidDataException(errorMsg);
-        }
+        validateSpecialty(specialty);
 
-        if (!GroupUtils.isValidStartYear(startYear)) {
-            String errorMsg = "Invalid start year: " + startYear;
-            logger.log(Level.SEVERE, errorMsg);
-            throw new InvalidDataException(errorMsg);
-        }
+        validateStartYear(startYear);
+
+//        if (!GroupUtils.isValidSpecialty(specialty)) {
+//            String errorMsg = "Invalid specialty: '" + specialty + "'";
+//            throw new InvalidDataException(errorMsg);
+//        }
+//
+//        if (!GroupUtils.isValidStartYear(startYear)) {
+//            String errorMsg = "Invalid start year: " + startYear;
+//            throw new InvalidDataException(errorMsg);
+//        }
 
         logger.log(Level.INFO, "Group created successfully: {0} {1} started in {2}",
                 new Object[]{number, specialty, startYear});
@@ -50,7 +54,6 @@ public record Group(
     public String getFullName() {
         if (specialty == null || specialty.length() < 2) {
             String errorMsg = "Cannot create full name - invalid specialty: " + specialty;
-            logger.log(Level.WARNING, errorMsg);
             throw new InvalidDataException(errorMsg);
         }
 
