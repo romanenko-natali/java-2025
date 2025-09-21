@@ -63,12 +63,12 @@ public class GroupTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "1234", "Spec@ialty", ""})
+    @ValueSource(strings = {"", "   ", "1234", "Spec@ialty", "S"})
     void testInvalidSpecialty(String invalidSpecialty) {
         InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
             new Group(101, invalidSpecialty, 2021);
         });
-        assertTrue(exception.getMessage().contains("Invalid specialty"));
+        assertTrue(exception.getMessage().contains("Must be 2-100 characters long and contain only"));
     }
 
     @ParameterizedTest
@@ -183,10 +183,10 @@ public class GroupTest {
 
     @Test
     void testFileNotFound() {
-        InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
+        IOException exception = assertThrows(IOException.class, () -> {
             GroupFileParser.parseFromCSV("nonexistent.csv");
         });
-        assertTrue(exception.getMessage().contains("Error reading file"));
+        assertTrue(exception.getMessage().contains("File not found"), exception.getMessage());
     }
 
     @Test
