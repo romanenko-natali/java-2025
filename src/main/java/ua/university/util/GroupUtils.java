@@ -79,11 +79,11 @@ public class GroupUtils {
 
         if (trimmed.isEmpty()) {
             throw new InvalidDataException(
-                    String.format("Specialty is blank after trimming. Original value: '%s'", specialty)
+                    String.format("Specialty is blank after trimming. Original value: '%s', Must be 1-100 characters long and contain only letters, spaces, hyphens, or apostrophes.", specialty)
             );
         }
 
-        if (!ValidationHelper.isStringMatchPattern(trimmed, "^[a-zA-Z\\s\\-']{1,100}$")) {
+        if (!ValidationHelper.isStringMatchPattern(trimmed, "^[a-zA-Z\\s\\-']{2,100}$")) {
             throw new InvalidDataException(
                     String.format(
                             "Invalid specialty: '%s'. Must be 1-100 characters long and contain only letters, spaces, hyphens, or apostrophes.",
