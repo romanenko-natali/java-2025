@@ -1,21 +1,29 @@
 package ua.university.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.util.PersonUtils;
 import ua.university.util.TeacherUtils;
-import java.util.Objects;
+
+import java.util.*;
 
 public class Teacher extends Person {
+
+    private static final Logger logger = LoggerFactory.getLogger(Teacher.class);
+
     private String department;
     private String position;
 
-    public Teacher() {
-        super();
-    }
+    public static final Comparator<Teacher> TEACHER_COMPARATOR_BY_DEPARTMENT =
+            Comparator.comparing(Teacher::getDepartment)
+                    .thenComparing(Teacher::getPosition)
+                    .thenComparing(Person.PERSON_COMPARATOR);
 
     public Teacher(String firstName, String lastName, String email, String department, String position) {
         super(firstName, lastName, email);
         setDepartment(department);
         setPosition(position);
+        logger.info("Created Teacher: {}", this);
     }
 
     public String getDepartment() {
@@ -23,9 +31,9 @@ public class Teacher extends Person {
     }
 
     public void setDepartment(String department) {
-        if (TeacherUtils.isValidDepartment(department)) {
-            this.department = department;
-        }
+        TeacherUtils.validateDepartment(department);
+        this.department = department.trim();
+        logger.debug("Set department='{}' for {}", this.department, getFullName());
     }
 
     public String getPosition() {
@@ -33,9 +41,9 @@ public class Teacher extends Person {
     }
 
     public void setPosition(String position) {
-        if (TeacherUtils.isValidPosition(position)) {
-            this.position = position;
-        }
+        TeacherUtils.validatePosition(position);
+        this.position = position.trim();
+        logger.debug("Set position='{}' for {}", this.position, getFullName());
     }
 
     @Override
@@ -44,25 +52,23 @@ public class Teacher extends Person {
     }
 
     public static Teacher createTeacher(String firstName, String lastName,
-                                                   String department, String position) {
-        if (PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName) &&
-                TeacherUtils.isValidDepartment(department) &&
-                TeacherUtils.isValidPosition(position)) {
+                                        String department, String position) {
+        PersonUtils.validateName(firstName);
+        PersonUtils.validateName(lastName);
+        TeacherUtils.validateDepartment(department);
+        TeacherUtils.validatePosition(position);
 
-            String email = PersonUtils.generateEmailFromNames(firstName, lastName);
-            return new Teacher(firstName, lastName, email, department, position);
-        }
-        return null;
+        String email = PersonUtils.generateEmailFromNames(firstName, lastName);
+        logger.info("Factory method: created Teacher with email='{}'", email);
+        return new Teacher(firstName, lastName, email, department, position);
     }
-
 
     @Override
     public String toString() {
         return "Teacher{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                "firstName='" + getFirstName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 ", department='" + department + '\'' +
                 ", position='" + position + '\'' +
                 '}';
@@ -71,9 +77,8 @@ public class Teacher extends Person {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Teacher teacher)) return false;
         if (!super.equals(o)) return false;
-        Teacher teacher = (Teacher) o;
         return Objects.equals(department, teacher.department) &&
                 Objects.equals(position, teacher.position);
     }
@@ -82,4 +87,5 @@ public class Teacher extends Person {
     public int hashCode() {
         return Objects.hash(super.hashCode(), department, position);
     }
+
 }

@@ -1,41 +1,37 @@
 package ua.university.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.exception.InvalidDataException;
 import ua.university.util.SubjectUtils;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
-public record Subject(
-        String name,
-        int credits
-) {
-    private static final Logger logger = Logger.getLogger(Subject.class.getName());
+public record Subject(String name, int credits) implements Comparable<Subject> {
+
+    private static final Logger logger = LoggerFactory.getLogger(Subject.class);
 
     public Subject {
-        if (name != null) {
-            name = name.trim();
-        }
+        String trimmedName = name != null ? name.trim() : null;
 
-        if (!SubjectUtils.isValidName(name)) {
+        if (!SubjectUtils.isValidName(trimmedName)) {
             String errorMsg = "Invalid subject name: '" + name + "'";
-            logger.log(Level.SEVERE, errorMsg);
+            logger.error(errorMsg);
             throw new InvalidDataException(errorMsg);
         }
 
         if (!SubjectUtils.isValidCredit(credits)) {
             String errorMsg = "Invalid credit amount: " + credits + " (must be 1-5)";
-            logger.log(Level.SEVERE, errorMsg);
+            logger.error(errorMsg);
             throw new InvalidDataException(errorMsg);
         }
 
-        logger.log(Level.INFO, "Subject created successfully: {0} with {1} credits",
-                new Object[]{name, credits});
+        name = trimmedName;
+        logger.info("Subject created successfully: {} with {} credits", name, credits);
     }
 
     public String getDifficultyLevel() {
         if (credits < 1 || credits > 5) {
             String errorMsg = "Invalid credits value for difficulty calculation: " + credits;
-            logger.log(Level.WARNING, errorMsg);
+            logger.warn(errorMsg);
             throw new InvalidDataException(errorMsg);
         }
 
@@ -46,8 +42,15 @@ public record Subject(
             default -> throw new InvalidDataException("Unexpected credits value: " + credits);
         };
 
-        logger.log(Level.FINE, "Difficulty level calculated: {0} for {1} credits",
-                new Object[]{difficulty, credits});
+        logger.debug("Difficulty level calculated: {} for {} credits", difficulty, credits);
         return difficulty;
     }
+
+    @Override
+    public int compareTo(Subject other) {
+        int nameCompare = this.name().compareTo(other.name());
+        if (nameCompare != 0) return nameCompare;
+        return Integer.compare(this.credits(), other.credits());
+    }
+
 }

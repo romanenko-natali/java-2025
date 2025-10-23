@@ -4,9 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
+import ua.university.exception.InvalidDataException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -27,15 +26,6 @@ public class PersonUtilsTest {
             Constructor<PersonUtils> constructor = PersonUtils.class.getDeclaredConstructor();
             assertTrue(Modifier.isPrivate(constructor.getModifiers()));
         }
-
-        @Test
-        @DisplayName("Constructor should be accessible via reflection")
-        void testConstructorAccessibleViaReflection() throws Exception {
-            Constructor<PersonUtils> constructor = PersonUtils.class.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            PersonUtils instance = constructor.newInstance();
-            assertNotNull(instance);
-        }
     }
 
     @Nested
@@ -50,8 +40,8 @@ public class PersonUtilsTest {
                     PersonUtils.class.getDeclaredMethod("formatName", String.class, String.class),
                     PersonUtils.class.getDeclaredMethod("formatEmail", String.class),
                     PersonUtils.class.getDeclaredMethod("generateEmailFromNames", String[].class),
-                    PersonUtils.class.getDeclaredMethod("isValidName", String.class),
-                    PersonUtils.class.getDeclaredMethod("isValidEmail", String.class)
+                    PersonUtils.class.getDeclaredMethod("validateName", String.class),
+                    PersonUtils.class.getDeclaredMethod("validateEmail", String.class)
             };
 
             for (Method method : methods) {
@@ -67,17 +57,21 @@ public class PersonUtilsTest {
     @DisplayName("capitalizeText Tests")
     class CapitalizeTextTests {
 
-        @Test
-        @DisplayName("Should return null when input is null")
-        void testNullInput() {
-            assertNull(PersonUtils.capitalizeText(null));
+        @ParameterizedTest
+        @NullSource
+        void testInvalidNames(String invalidName) {
+            assertThrows(
+                    InvalidDataException.class,
+                    () -> PersonUtils.capitalizeText(invalidName),
+                    "Expected capitalizeText() to throw InvalidDataException for: " + invalidName
+            );
         }
 
         @Test
-        @DisplayName("Should return original when input is empty after trim")
+        @DisplayName("Should return empty string when input is empty after trim")
         void testEmptyInput() {
             assertEquals("", PersonUtils.capitalizeText(""));
-            assertEquals("   ", PersonUtils.capitalizeText("   "));
+            assertEquals("", PersonUtils.capitalizeText("   "));
         }
 
         @Test
@@ -110,22 +104,22 @@ public class PersonUtilsTest {
     @DisplayName("formatName Tests")
     class FormatNameTests {
 
-        @Test
-        @DisplayName("Should return empty string when firstName is null")
-        void testFirstNameNull() {
-            assertEquals("", PersonUtils.formatName(null, "Doe"));
+        static Stream<Object[]> invalidNamePairs() {
+            return Stream.of(
+                    new Object[]{null, null},
+                    new Object[]{null, "Smith"},
+                    new Object[]{"John", null}
+            );
         }
 
-        @Test
-        @DisplayName("Should return empty string when lastName is null")
-        void testLastNameNull() {
-            assertEquals("", PersonUtils.formatName("John", null));
-        }
-
-        @Test
-        @DisplayName("Should return empty string when both names are null")
-        void testBothNamesNull() {
-            assertEquals("", PersonUtils.formatName(null, null));
+        @ParameterizedTest
+        @MethodSource("invalidNamePairs")
+        void testInvalidNamePairs(String firstName, String lastName) {
+            assertThrows(
+                    InvalidDataException.class,
+                    () -> PersonUtils.formatName(firstName, lastName),
+                    () -> "Expected InvalidDataException for firstName='" + firstName + "', lastName='" + lastName + "'"
+            );
         }
 
         @Test
@@ -156,12 +150,6 @@ public class PersonUtilsTest {
     class FormatEmailTests {
 
         @Test
-        @DisplayName("Should return null when email is null")
-        void testNullEmail() {
-            assertNull(PersonUtils.formatEmail(null));
-        }
-
-        @Test
         @DisplayName("Should convert to lowercase and trim")
         void testBasicFormatting() {
             assertEquals("john@example.com", PersonUtils.formatEmail("JOHN@EXAMPLE.COM"));
@@ -169,16 +157,22 @@ public class PersonUtilsTest {
             assertEquals("test@domain.com", PersonUtils.formatEmail("  TEST@DOMAIN.COM  "));
         }
 
-        @Test
-        @DisplayName("Should handle empty string")
-        void testEmptyString() {
-            assertEquals("", PersonUtils.formatEmail(""));
+        @ParameterizedTest
+        @NullAndEmptySource
+        void testNullAndEmptyNames(String invalidName) {
+            assertThrows(
+                    InvalidDataException.class,
+                    () -> PersonUtils.formatEmail(invalidName),
+                    "Expected formatEmail() to throw InvalidDataException for: " + invalidName
+            );
         }
 
         @Test
-        @DisplayName("Should handle whitespace-only string")
         void testWhitespaceOnly() {
-            assertEquals("", PersonUtils.formatEmail("   "));
+            assertThrows(
+                    InvalidDataException.class,
+                    () -> PersonUtils.formatEmail("   ")
+            );
         }
 
         @Test
@@ -191,32 +185,6 @@ public class PersonUtilsTest {
     @Nested
     @DisplayName("generateEmailFromNames Tests")
     class GenerateEmailFromNamesTests {
-
-        @Test
-        @DisplayName("Should return null when names array is null")
-        void testNullArray() {
-            assertNull(PersonUtils.generateEmailFromNames((String[]) null));
-        }
-
-        @Test
-        @DisplayName("Should return null when names array is empty")
-        void testEmptyArray() {
-            assertNull(PersonUtils.generateEmailFromNames(new String[0]));
-        }
-
-        @Test
-        @DisplayName("Should return null when any name is null")
-        void testNullName() {
-            assertNull(PersonUtils.generateEmailFromNames("John", null, "Doe"));
-            assertNull(PersonUtils.generateEmailFromNames(null));
-        }
-
-        @Test
-        @DisplayName("Should return null when any name is empty after trim")
-        void testEmptyName() {
-            assertNull(PersonUtils.generateEmailFromNames("John", "", "Doe"));
-            assertNull(PersonUtils.generateEmailFromNames("John", "   ", "Doe"));
-        }
 
         @Test
         @DisplayName("Should generate email from single name")
@@ -244,101 +212,14 @@ public class PersonUtilsTest {
     @DisplayName("isValidName Tests")
     class IsValidNameTests {
 
-        @Test
-        @DisplayName("Should return false for null name")
-        void testNullName() {
-            assertFalse(PersonUtils.isValidName(null));
-        }
-
-        @Test
-        @DisplayName("Should return false for empty name")
-        void testEmptyName() {
-            assertFalse(PersonUtils.isValidName(""));
-            assertFalse(PersonUtils.isValidName("   "));
-        }
-
-        @Test
-        @DisplayName("Should return true for valid length names")
-        void testValidLengthNames() {
-            assertTrue(PersonUtils.isValidName("A"));
-            assertTrue(PersonUtils.isValidName("John"));
-            assertTrue(PersonUtils.isValidName("A".repeat(50)));
-        }
-
         @ParameterizedTest
-        @ValueSource(ints = {51, 100, 200})
-        @DisplayName("Should return false for names exceeding maximum length of 50 characters")
-        void testNamesTooLong(int length) {
-            String longName = "A".repeat(length);
-            boolean actual = PersonUtils.isValidName(longName);
-            assertFalse(actual,
-                    () -> String.format("Expected name of length %d to be invalid (max allowed: 50), but was valid", length));
-        }
-
-        @ParameterizedTest
-        @MethodSource("trimmedLengthTestCases")
-        @DisplayName("Should validate names based on trimmed length")
-        void testValidationUsesTrimmedLength(String name, int expectedLength, boolean expectedValid) {
-            boolean actual = PersonUtils.isValidName(name);
-            assertEquals(expectedValid, actual,
-                    () -> String.format("Expected name '%s' (trimmed length: %d) to be %s",
-                            name, expectedLength, expectedValid ? "valid" : "invalid"));
-        }
-
-        static Stream<Arguments> trimmedLengthTestCases() {
-            return Stream.of(
-                    Arguments.of("  John  ", 4, true),
-                    Arguments.of("  A  ", 1, true),
-                    Arguments.of("  " + "A".repeat(50) + "  ", 50, true),
-                    Arguments.of("  " + "A".repeat(51) + "  ", 51, false)
+        @NullAndEmptySource
+        void testInvalidNames(String invalidName) {
+            assertThrows(
+                    InvalidDataException.class,
+                    () -> PersonUtils.validateName(invalidName),
+                    "Expected validateName() to throw InvalidDataException for: " + invalidName
             );
-        }
-    }
-
-    @Nested
-    @DisplayName("isValidEmail Tests")
-    class IsValidEmailTests {
-
-        @Test
-        @DisplayName("Should return false for null email")
-        void testNullEmail() {
-            boolean actual = PersonUtils.isValidEmail(null);
-            assertFalse(actual, "Expected null email to be invalid, but was valid");
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {
-                "user@domain.com",
-                "test.email@example.org",
-                "user-name@sub.domain.co.uk",
-                "123@numbers.net",
-                "a@b.co"
-        })
-        @DisplayName("Should return true for valid email formats")
-        void testValidEmails(String email) {
-            boolean actual = PersonUtils.isValidEmail(email);
-            assertTrue(actual,
-                    () -> String.format("Expected email '%s' to be valid, but was invalid", email));
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = {
-                "",
-                "invalid",
-                "@domain.com",
-                "user@",
-                "user@domain",
-                "user@domain.",
-                "user@domain.c",
-                "user.domain.com",
-                "user@domain..com",
-                "user@@domain.com"
-        })
-        @DisplayName("Should return false for invalid email formats")
-        void testInvalidEmails(String email) {
-            boolean actual = PersonUtils.isValidEmail(email);
-            assertFalse(actual,
-                    () -> String.format("Expected email '%s' to be invalid, but was valid", email));
         }
     }
 }

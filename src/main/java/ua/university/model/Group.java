@@ -3,8 +3,9 @@ package ua.university.model;
 import ua.university.exception.InvalidDataException;
 
 import java.time.LocalDate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static ua.university.util.GroupUtils.validateSpecialty;
 import static ua.university.util.GroupUtils.validateStartYear;
@@ -14,7 +15,8 @@ public record Group(
         String specialty,
         int startYear
 ) implements Comparable<Group> {
-    private static final Logger logger = Logger.getLogger(Group.class.getName());
+
+    private static final Logger logger = LoggerFactory.getLogger(Group.class);
 
     public Group {
         if (specialty != null) {
@@ -30,24 +32,12 @@ public record Group(
 
         validateStartYear(startYear);
 
-//        if (!GroupUtils.isValidSpecialty(specialty)) {
-//            String errorMsg = "Invalid specialty: '" + specialty + "'";
-//            throw new InvalidDataException(errorMsg);
-//        }
-//
-//        if (!GroupUtils.isValidStartYear(startYear)) {
-//            String errorMsg = "Invalid start year: " + startYear;
-//            throw new InvalidDataException(errorMsg);
-//        }
-
-        logger.log(Level.INFO, "Group created successfully: {0} {1} started in {2}",
-                new Object[]{number, specialty, startYear});
+        logger.info("Group created successfully: {} {} started in {}", number, specialty, startYear);
     }
 
     public int getCurrentYear() {
         int currentYear = LocalDate.now().getYear() - startYear + 1;
-        logger.log(Level.FINE, "Calculated current year for group {0}: {1}",
-                new Object[]{getFullName(), currentYear});
+        logger.debug("Calculated current year for group {}: {}", getFullName(), currentYear);
         return currentYear;
     }
 
@@ -58,14 +48,13 @@ public record Group(
         }
 
         String fullName = specialty.substring(0, 2).toUpperCase() + number + "-" + (startYear % 100);
-        logger.log(Level.FINE, "Generated full name: {0}", fullName);
+        logger.debug("Generated full name: {0}", fullName);
         return fullName;
     }
 
     public boolean isGraduated() {
         boolean graduated = getCurrentYear() > 4;
-        logger.log(Level.FINE, "Group {0} graduation status: {1}",
-                new Object[]{getFullName(), graduated});
+        logger.debug("Group {0} graduation status: {1}", getFullName(), graduated);
         return graduated;
     }
 

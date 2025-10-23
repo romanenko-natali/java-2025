@@ -2,7 +2,6 @@ package ua.university.repository;
 
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * Generic repository for managing collections of objects
@@ -10,7 +9,7 @@ import java.util.logging.Level;
 class GenericRepository<T> {
     private static final Logger logger = Logger.getLogger(GenericRepository.class.getName());
 
-    private final List<T> items;
+    protected final List<T> items;
     private final IdentityExtractor<T> identityExtractor;
     private final String entityType;
 
@@ -139,6 +138,25 @@ class GenericRepository<T> {
         int sizeBefore = items.size();
         items.clear();
         logger.info("Cleared repository. Removed " + sizeBefore + " " + entityType + " items");
+    }
+
+    /**
+     * Sort items by identity using ascending or descending order.
+     */
+    public void sortByIdentity(boolean asc) {
+        items.sort(Comparator.comparing(identityExtractor::extractIdentity));
+        if (!asc) {
+            Collections.reverse(items);
+        }
+        logger.info("Sorted " + entityType + " by identity in " + (asc ? "ascending" : "descending") + " order");
+    }
+
+    /**
+     * Alternative: sort using String order ("desc" for descending, any other value for ascending)
+     */
+    public void sortByIdentity(String order) {
+        boolean asc = !"desc".equalsIgnoreCase(order);
+        sortByIdentity(asc);
     }
 
     /**

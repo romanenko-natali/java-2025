@@ -1,36 +1,45 @@
 package ua.university.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.util.PersonUtils;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Person implements Comparable<Person> {
-    protected String firstName;
-    protected String lastName;
-    protected String email;
 
-    public Person() {
-    }
+    private static final Logger logger = LoggerFactory.getLogger(Person.class);
+
+    private String firstName;
+    private String lastName;
+    private String email;
+
+    public static final Comparator<Person> PERSON_COMPARATOR =
+            Comparator.comparing(Person::getFirstName)
+                    .thenComparing(Person::getLastName)
+                    .thenComparing(Person::getEmail);
 
     public Person(String firstName, String lastName, String email) {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
+        logger.info("Created Person: {}", this);
     }
 
     protected String getFullName() {
         return PersonUtils.formatName(firstName, lastName);
     }
 
-
     public String getFirstName() {
         return firstName;
     }
 
     public void setFirstName(String firstName) {
-        if (PersonUtils.isValidName(firstName)) {
-            this.firstName = PersonUtils.capitalizeText(firstName);
-        }
+        PersonUtils.validateName(firstName);
+        this.firstName = PersonUtils.capitalizeText(firstName);
+        logger.debug("Set firstName='{}'", this.firstName);
     }
 
     public String getLastName() {
@@ -38,9 +47,9 @@ public class Person implements Comparable<Person> {
     }
 
     public void setLastName(String lastName) {
-        if (PersonUtils.isValidName(lastName)) {
-            this.lastName = PersonUtils.capitalizeText(lastName);
-        }
+        PersonUtils.validateName(lastName);
+        this.lastName = PersonUtils.capitalizeText(lastName);
+        logger.debug("Set lastName='{}'", this.lastName);
     }
 
     public String getEmail() {
@@ -48,21 +57,18 @@ public class Person implements Comparable<Person> {
     }
 
     public void setEmail(String email) {
-        if (email != null) {
-            String formattedEmail = PersonUtils.formatEmail(email);
-            if (PersonUtils.isValidEmail(formattedEmail)) {
-                this.email = formattedEmail;
-            }
-        }
+        PersonUtils.validateEmail(email);
+        this.email = PersonUtils.formatEmail(email);
+        logger.debug("Set email='{}'", this.email);
     }
 
     public static Person createPerson(String firstName, String lastName) {
-        if (PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName)) {
-            String email = PersonUtils.generateEmailFromNames(firstName, lastName);
-            return new Person(firstName, lastName, email);
-        }
-        return null;
+        PersonUtils.validateName(firstName);
+        PersonUtils.validateName(lastName);
+
+        String email = PersonUtils.generateEmailFromNames(firstName, lastName);
+        logger.info("Factory method: created Person with generated email '{}'", email);
+        return new Person(firstName, lastName, email);
     }
 
     @Override
@@ -77,8 +83,7 @@ public class Person implements Comparable<Person> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
+        if (!(o instanceof Person person)) return false;
         return Objects.equals(firstName, person.firstName) &&
                 Objects.equals(lastName, person.lastName) &&
                 Objects.equals(email, person.email);
@@ -89,14 +94,17 @@ public class Person implements Comparable<Person> {
         return Objects.hash(firstName, lastName, email);
     }
 
-    @Override
-    public int compareTo(Person o) {
-        int compareFirstName = firstName.compareTo(o.getFirstName());
-        if (compareFirstName != 0) return compareFirstName;
-
-        int compareLastName = lastName.compareTo(o.getLastName());
-        if (compareLastName != 0) return compareLastName;
-
-        return email.compareTo(o.getEmail());
+        @Override
+    public int compareTo(Person other) {
+        return PERSON_COMPARATOR.compare(this, other);
     }
 }
+
+class PersonByEmailComparator implements Comparator<Person> {
+
+    @Override
+    public int compare(Person o1, Person o2) {
+        return o2.getEmail().compareTo(o1.getEmail());
+    }
+}
+

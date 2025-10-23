@@ -1,86 +1,90 @@
 package ua.university.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.exception.InvalidDataException;
 import ua.university.util.PersonUtils;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Course implements Comparable<Course> {
-    private Subject subject;
-    private Teacher teacher;
-    private Group group;
 
-    public Course() {
-    }
+    private static final Logger logger = LoggerFactory.getLogger(Course.class);
+
+    private final Subject subject;
+    private final Teacher teacher;
+    private final Group group;
+
+    private static final Comparator<Course> COURSE_COMPARATOR =
+            Comparator.comparing((Course c) -> c.getSubject().name())
+                    .thenComparing(c -> c.getTeacher().getFullName())
+                    .thenComparing(c -> c.getGroup().getFullName());
 
     public Course(Subject subject, Teacher teacher, Group group) {
-        this.subject = subject;
-        this.teacher = teacher;
-        this.group = group;
+        this.subject = Objects.requireNonNull(subject, "Subject must not be null");
+        this.teacher = Objects.requireNonNull(teacher, "Teacher must not be null");
+        this.group = Objects.requireNonNull(group, "Group must not be null");
+
+        logger.debug("Created Course: {}", getIdentity());
     }
 
     public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
     public Teacher getTeacher() {
         return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
     }
 
     public Group getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
     public static Course createCourse(Subject subject, Teacher teacher, Group group) {
         if (subject == null || teacher == null || group == null) {
+            logger.error("Failed to create course: subject={}, teacher={}, group={}",
+                    subject, teacher, group);
             throw new InvalidDataException("None of the objects (subject, teacher, or group) should be null.");
         }
+        logger.info("Course created successfully: subject={}, teacher={}, group={}",
+                subject.name(), teacher.getFullName(), group.getFullName());
         return new Course(subject, teacher, group);
     }
 
     public String getCourseInfo() {
-        return String.format("Course: %s | Teacher: %s | Group: %s | Credits: %d",
+        String info = String.format("Course: %s | Teacher: %s | Group: %s | Credits: %d",
                 subject.name(),
                 PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()),
                 group.groupInfo(),
                 subject.credits());
+
+        logger.debug("Retrieved course info: {}", info);
+        return info;
     }
 
-    public String getIdentity(){
+    public String getIdentity() {
         return subject.name() + "-" +
-        PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()) + "-" +
+                PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()) + "-" +
                 group.groupInfo();
     }
 
     @Override
     public String toString() {
         return "Course{" +
-                "subject=" + subject +
-                ", teacher=" + teacher +
-                ", group=" + group +
+                "subject=" + subject.name() +
+                ", teacher=" + teacher.getFullName() +
+                ", group=" + group.getFullName() +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return Objects.equals(subject, course.subject) &&
-                Objects.equals(teacher, course.teacher) &&
-                Objects.equals(group, course.group);
+        if (!(o instanceof Course course)) return false;
+        return subject.equals(course.subject) &&
+                teacher.equals(course.teacher) &&
+                group.equals(course.group);
     }
 
     @Override
@@ -89,19 +93,7 @@ public class Course implements Comparable<Course> {
     }
 
     @Override
-
     public int compareTo(Course other) {
-        int subjectComparison = this.getSubject().name().compareTo(other.getSubject().name());
-        if (subjectComparison != 0) {
-            return subjectComparison;
-        }
-
-        int teacherComparison = this.getTeacher().getFullName().compareTo(other.getTeacher().getFullName());
-        if (teacherComparison != 0) {
-            return teacherComparison;
-        }
-
-        return this.getGroup().getFullName().compareTo(other.getGroup().getFullName());
+        return COURSE_COMPARATOR.compare(this, other);
     }
 }
-
