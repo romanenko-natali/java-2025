@@ -1,11 +1,16 @@
 package ua.university.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.util.PersonUtils;
 import ua.university.util.StudentUtils;
 
 import java.util.Objects;
 
 public class Student extends Person {
+
+    private static final Logger logger = LoggerFactory.getLogger(Student.class);
+
     private String studentId;
     private Group group;
 
@@ -16,7 +21,15 @@ public class Student extends Person {
     public Student(String firstName, String lastName, String email, String studentId, Group group) {
         super(firstName, lastName, email);
         setStudentId(studentId);
-        this.group = group;
+        setGroup(group);
+        logger.info("Created Student: {}", this);
+    }
+
+    public Student(String firstName, String lastName, String studentId, Group group) {
+        this(firstName, lastName,
+                PersonUtils.generateEmailFromNames(firstName, lastName, studentId),
+                studentId,
+                group);
     }
 
     public String getStudentId() {
@@ -24,9 +37,9 @@ public class Student extends Person {
     }
 
     public void setStudentId(String studentId) {
-        if (StudentUtils.isValidStudentId(studentId)) {
-            this.studentId = StudentUtils.formatStudentId(studentId);
-        }
+        StudentUtils.validateStudentId(studentId);
+        this.studentId = StudentUtils.formatStudentId(studentId);
+        logger.debug("Set studentId='{}'", this.studentId);
     }
 
     public Group getGroup() {
@@ -34,7 +47,11 @@ public class Student extends Person {
     }
 
     public void setGroup(Group group) {
+        if (group == null) {
+            logger.warn("Assigned null group to Student '{}'", getFullName());
+        }
         this.group = group;
+        logger.debug("Set group='{}'", group);
     }
 
     @Override
@@ -44,13 +61,13 @@ public class Student extends Person {
 
     public static Student createStudent(String firstName, String lastName,
                                         String studentId, Group group) {
-        if (StudentUtils.isValidStudentId(studentId) &&
-                PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName)) {
-            String email = PersonUtils.generateEmailFromNames(firstName, lastName, studentId);
-            return new Student(firstName, lastName, email, studentId, group);
-        }
-        return null;
+        PersonUtils.validateName(firstName);
+        PersonUtils.validateName(lastName);
+        StudentUtils.validateStudentId(studentId);
+
+        String email = PersonUtils.generateEmailFromNames(firstName, lastName, studentId);
+        logger.info("Factory method: created Student with email='{}'", email);
+        return new Student(firstName, lastName, email, studentId, group);
     }
 
 
@@ -68,9 +85,8 @@ public class Student extends Person {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Student student)) return false;
         if (!super.equals(o)) return false;
-        Student student = (Student) o;
         return Objects.equals(studentId, student.studentId) &&
                 Objects.equals(group, student.group);
     }

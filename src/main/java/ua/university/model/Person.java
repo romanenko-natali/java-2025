@@ -1,10 +1,15 @@
 package ua.university.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.util.PersonUtils;
 
 import java.util.Objects;
 
 public class Person {
+
+    private static final Logger logger = LoggerFactory.getLogger(Student.class);
+
     protected String firstName;
     protected String lastName;
     protected String email;
@@ -16,6 +21,7 @@ public class Person {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
+        logger.info("Created Person: {}", this);
     }
 
     protected String getFullName() {
@@ -28,9 +34,9 @@ public class Person {
     }
 
     public void setFirstName(String firstName) {
-        if (PersonUtils.isValidName(firstName)) {
-            this.firstName = PersonUtils.capitalizeText(firstName);
-        }
+        PersonUtils.validateName(firstName);
+        this.firstName = PersonUtils.capitalizeText(firstName);
+        logger.debug("Set firstName='{}'", this.firstName);
     }
 
     public String getLastName() {
@@ -38,9 +44,9 @@ public class Person {
     }
 
     public void setLastName(String lastName) {
-        if (PersonUtils.isValidName(lastName)) {
-            this.lastName = PersonUtils.capitalizeText(lastName);
-        }
+        PersonUtils.validateName(lastName);
+        this.lastName = PersonUtils.capitalizeText(lastName);
+        logger.debug("Set lastName='{}'", this.lastName);
     }
 
     public String getEmail() {
@@ -48,21 +54,18 @@ public class Person {
     }
 
     public void setEmail(String email) {
-        if (email != null) {
-            String formattedEmail = PersonUtils.formatEmail(email);
-            if (PersonUtils.isValidEmail(formattedEmail)) {
-                this.email = formattedEmail;
-            }
-        }
+        PersonUtils.validateEmail(email);
+        this.email = PersonUtils.formatEmail(email);
+        logger.debug("Set email='{}'", this.email);
     }
 
     public static Person createPerson(String firstName, String lastName) {
-        if (PersonUtils.isValidName(firstName) &&
-                PersonUtils.isValidName(lastName)) {
-            String email = PersonUtils.generateEmailFromNames(firstName, lastName);
-            return new Person(firstName, lastName, email);
-        }
-        return null;
+        PersonUtils.validateName(firstName);
+        PersonUtils.validateName(lastName);
+
+        String email = PersonUtils.generateEmailFromNames(firstName, lastName);
+        logger.info("Factory method: created Person with generated email '{}'", email);
+        return new Person(firstName, lastName, email);
     }
 
     @Override
@@ -77,8 +80,7 @@ public class Person {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
+        if (!(o instanceof Person person)) return false;
         return Objects.equals(firstName, person.firstName) &&
                 Objects.equals(lastName, person.lastName) &&
                 Objects.equals(email, person.email);

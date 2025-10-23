@@ -7,7 +7,3 @@ j
 :src/test/java/ua/university/util/ValidationHelperTest.java,7/b/7bb4da678bec21761934eb026b1dda8b893199f9
 e
 5src/test/java/ua/university/util/PersonUtilsTest.java,6/8/68d37262c95377d512d8870e28f987ab9c79d71f
-b
-2src/main/java/ua/university/util/TeacherUtils.java,b/2/b24c5060a38ccf5dc932cae469c3c167c0051412
-a
-1src/main/java/ua/university/util/PersonUtils.java,f/0/f0bd5c77d999f5a115172ee362da9de93d4e6f0a

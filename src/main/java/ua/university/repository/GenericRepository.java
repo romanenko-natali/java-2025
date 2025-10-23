@@ -1,14 +1,19 @@
 package ua.university.repository;
 
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Generic repository for managing collections of objects
  */
-class GenericRepository<T> {
-    private static final Logger logger = Logger.getLogger(GenericRepository.class.getName());
+public class GenericRepository<T> {
+    private static final Logger logger = LoggerFactory.getLogger(GenericRepository.class);
+
 
     private final List<T> items;
     private final IdentityExtractor<T> identityExtractor;
@@ -18,7 +23,7 @@ class GenericRepository<T> {
         this.items = new ArrayList<>();
         this.identityExtractor = identityExtractor;
         this.entityType = entityType;
-        logger.info("Created repository for " + entityType);
+        logger.info("Created repository for {}", entityType);
     }
 
     /**
@@ -26,19 +31,19 @@ class GenericRepository<T> {
      */
     public boolean add(T item) {
         if (item == null) {
-            logger.warning("Attempted to add null " + entityType);
+            logger.warn("Attempted to add null {}", entityType);
             return false;
         }
 
         String identity = identityExtractor.extractIdentity(item);
         if (findByIdentity(identity).isPresent()) {
-            logger.warning("Cannot add " + entityType + " - already exists with identity: " + identity);
+            logger.warn("Cannot add {} - already exists with identity: {}", entityType, identity);
             return false;
         }
 
         boolean added = items.add(item);
         if (added) {
-            logger.info("Added " + entityType + ": " + identity);
+            logger.info("Added {}: {}", entityType, identity);
         }
         return added;
     }
@@ -48,15 +53,15 @@ class GenericRepository<T> {
      */
     public boolean remove(T item) {
         if (item == null) {
-            logger.warning("Attempted to remove null " + entityType);
+            logger.warn("Attempted to remove null {}", entityType);
             return false;
         }
 
         boolean removed = items.remove(item); // Uses equals() internally
         if (removed) {
-            logger.info("Removed " + entityType + ": " + identityExtractor.extractIdentity(item));
+            logger.info("Removed {}: {}", entityType, identityExtractor.extractIdentity(item));
         } else {
-            logger.warning("Failed to remove " + entityType + ": " + identityExtractor.extractIdentity(item));
+            logger.warn("Failed to remove {}: {}", entityType, identityExtractor.extractIdentity(item));
         }
         return removed;
     }
@@ -66,7 +71,7 @@ class GenericRepository<T> {
      */
     public boolean removeByIdentity(String identity) {
         if (identity == null) {
-            logger.warning("Attempted to remove " + entityType + " with null identity");
+            logger.warn("Attempted to remove {} with null identity", entityType);
             return false;
         }
 
@@ -77,11 +82,11 @@ class GenericRepository<T> {
         if (itemToRemove.isPresent()) {
             boolean removed = items.remove(itemToRemove.get());
             if (removed) {
-                logger.info("Removed " + entityType + " by identity: " + identity);
+                logger.info("Removed {} by identity: {}", entityType, identity);
             }
             return removed;
         } else {
-            logger.warning("No " + entityType + " found with identity: " + identity + " to remove");
+            logger.warn("No {} found with identity: {} to remove", entityType, identity);
             return false;
         }
     }
@@ -105,7 +110,7 @@ class GenericRepository<T> {
      */
     public Optional<T> findByIdentity(String identity) {
         if (identity == null) {
-            logger.warning("Attempted to find " + entityType + " with null identity");
+            logger.warn("Attempted to find {} with null identity", entityType);
             return Optional.empty();
         }
 
@@ -114,16 +119,16 @@ class GenericRepository<T> {
                 .findFirst();
 
         if (result.isPresent()) {
-            logger.info("Found " + entityType + " with identity: " + identity);
+            logger.info("Found {} with identity: {}", entityType, identity);
         } else {
-            logger.info("No " + entityType + " found with identity: " + identity);
+            logger.info("No {} found with identity: {}", entityType, identity);
         }
 
         return result;
     }
 
     public List<T> getAll() {
-        logger.info("Retrieved all " + entityType + " items. Count: " + items.size());
+        logger.info("Retrieved all {} items. Count: {}", entityType, items.size());
         return new ArrayList<>(items);
     }
 
@@ -138,7 +143,7 @@ class GenericRepository<T> {
     public void clear() {
         int sizeBefore = items.size();
         items.clear();
-        logger.info("Cleared repository. Removed " + sizeBefore + " " + entityType + " items");
+        logger.info("Cleared repository. Removed {} {} items", sizeBefore, entityType);
     }
 
     /**

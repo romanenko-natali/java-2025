@@ -25,7 +25,7 @@ public class GroupUtils {
         return specialty != null &&
                 !specialty.trim().isEmpty() &&
                 ValidationHelper.isStringLengthBetween(specialty, 1, 100) &&
-                specialty.matches("^[a-zA-Z\\s\\-']+$");
+                specialty.matches("^[\\p{L}\\s\\-']+$");
     }
 
 
