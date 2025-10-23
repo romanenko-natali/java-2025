@@ -1,304 +1,358 @@
 package ua.university.repository;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.university.model.Group;
 import ua.university.model.Student;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
-import java.util.Optional;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * Comprehensive unit tests for GenericRepository<Student> with parameterized tests and soft assertions
- */
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DisplayName("Student Repository Tests")
-public class StudentRepositoryTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private GenericRepository<Student> studentRepository;
-    private Group testGroup1, testGroup2;
-    private Student testStudent1, testStudent2, testStudent3;
+@DisplayName("StudentRepository Sorting Tests")
+class StudentRepositorySortingTest {
+    private static final Logger logger = LoggerFactory.getLogger(StudentRepositorySortingTest.class);
 
-    @BeforeAll
-    void setUpTestData() {
-        testGroup1 = new Group(101, "CS", LocalDate.now().getYear());
-        testGroup2 = new Group(102, "Math", LocalDate.now().getYear());
-
-        testStudent1 = new Student("John", "john@email.com", "Doe", "STD001", testGroup1);
-        testStudent2 = new Student("Jane", "jane@email.com", "Smith", "STD002", testGroup1);
-        testStudent3 = new Student("Bob", "bob@email.com", "Johnson", "STD003", testGroup2);
-    }
+    private StudentRepository studentRepository;
+    private Student studentAlice;
+    private Student studentBob;
+    private Student studentCharlie;
+    private Student studentAliceB;
+    private Student studentAliceA;
+    private Group groupCS;
+    private Group groupIT;
 
     @BeforeEach
     void setUp() {
-        studentRepository = new GenericRepository<>(Student::getStudentId, "Student");
-        studentRepository.getItemsForTesting().add(testStudent1);
+        logger.info("Setting up test data");
+        studentRepository = new StudentRepository();
+
+        groupCS = new Group(21, "Computer Science", 2023);
+        groupIT = new Group(22, "Information Technology", 2023);
+
+        // Different last names
+        studentAlice = new Student("Alice", "Smith", "alice.smith@student.ua", "CSS001", groupCS);
+        studentBob = new Student("Bob", "Johnson", "bob.johnson@student.ua", "CSS002", groupCS);
+        studentCharlie = new Student("Charlie", "Brown", "charlie.brown@student.ua", "ITT001", groupIT);
+
+        // Same last name, different first names
+        studentAliceB = new Student("Alice", "Williams", "alice.williams@student.ua", "CSS003", groupCS);
+        studentAliceA = new Student("Anna", "Williams", "anna.williams@student.ua", "CSS004", groupIT);
+
+        studentRepository.add(studentBob);
+        studentRepository.add(studentAlice);
+        studentRepository.add(studentCharlie);
+        studentRepository.add(studentAliceB);
+        studentRepository.add(studentAliceA);
+
+        logger.info("Test setup completed with {} students", studentRepository.size());
     }
 
-
-    /**
-     * Provides student IDs for search operations
-     */
-    static Stream<Arguments> studentIdsProvider() {
-        return Stream.of(
-                Arguments.of("STD001", true, "Valid student ID"),
-                Arguments.of("STD002", true, "Another valid student ID"),
-                Arguments.of("ST999", false, "Non-existent student ID"),
-                Arguments.of("INVALID", false, "Invalid format student ID"),
-                Arguments.of("", false, "Empty string ID"),
-                Arguments.of(null, false, "Null ID")
-        );
-    }
-
-    /**
-     * Provides invalid data for edge case testing
-     */
-    static Stream<Arguments> invalidDataProvider() {
-        return Stream.of(
-                Arguments.of("STD001", "John", "Doe", "CS"),
-                Arguments.of(null, "null student object"),
-                Arguments.of("", "empty string"),
-                Arguments.of("   ", "whitespace string")
-        );
-    }
-
-
-
-    @DisplayName("Test adding valid students")
     @Test
-    void testAddValidStudent() {
+    @DisplayName("sortByName should sort by last name, then first name, then email")
+    void testSortByName() {
+        logger.info("Testing sortByName");
+
+        List<Student> sorted = studentRepository.sortByName();
+
+        assertThat(sorted)
+                .as("Should return all students")
+                .hasSize(5);
+
         SoftAssertions softly = new SoftAssertions();
 
-        int initialSize = studentRepository.size();
+        // Brown < Johnson < Smith < Williams (Alice) < Williams (Anna)
+        softly.assertThat(sorted.get(0).getLastName())
+                .as("First student should be Brown")
+                .isEqualTo("Brown");
 
-        // Test adding student
-        boolean added = studentRepository.add(testStudent2);
+        softly.assertThat(sorted.get(1).getLastName())
+                .as("Second student should be Johnson")
+                .isEqualTo("Johnson");
 
-        softly.assertThat(added)
-                .as("Should successfully add student %s", testStudent2.getStudentId())
-                .isTrue();
+        softly.assertThat(sorted.get(2).getLastName())
+                .as("Third student should be Smith")
+                .isEqualTo("Smith");
 
-        softly.assertThat(studentRepository.size())
-                .as("Repository size should increase by 1")
-                .isEqualTo(initialSize + 1);
+        // Both Williams, but Alice < Anna
+        softly.assertThat(sorted.get(3).getLastName())
+                .as("Fourth student should be Williams")
+                .isEqualTo("Williams");
+        softly.assertThat(sorted.get(3).getFirstName())
+                .as("Fourth student first name should be Alice")
+                .isEqualTo("Alice");
+
+        softly.assertThat(sorted.get(4).getLastName())
+                .as("Fifth student should be Williams")
+                .isEqualTo("Williams");
+        softly.assertThat(sorted.get(4).getFirstName())
+                .as("Fifth student first name should be Anna")
+                .isEqualTo("Anna");
+
+        softly.assertAll();
+        logger.info("sortByName test completed successfully");
+    }
+
+    @Test
+    @DisplayName("sortByNameDesc should sort by last name descending, then first name, then email")
+    void testSortByNameDesc() {
+        logger.info("Testing sortByNameDesc");
+
+        List<Student> sorted = studentRepository.sortByNameDesc();
+
+        assertThat(sorted)
+                .as("Should return all students")
+                .hasSize(5);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        // Williams > Smith > Johnson > Brown (descending last name)
+        softly.assertThat(sorted.get(0).getLastName())
+                .as("First student should be Williams")
+                .isEqualTo("Williams");
+        softly.assertThat(sorted.get(0).getFirstName())
+                .as("First Williams should be Alice (comes before Anna)")
+                .isEqualTo("Alice");
+
+        softly.assertThat(sorted.get(1).getLastName())
+                .as("Second student should be Williams")
+                .isEqualTo("Williams");
+        softly.assertThat(sorted.get(1).getFirstName())
+                .as("Second Williams should be Anna")
+                .isEqualTo("Anna");
+
+        softly.assertThat(sorted.get(2).getLastName())
+                .as("Third student should be Smith")
+                .isEqualTo("Smith");
+
+        softly.assertThat(sorted.get(3).getLastName())
+                .as("Fourth student should be Johnson")
+                .isEqualTo("Johnson");
+
+        softly.assertThat(sorted.get(4).getLastName())
+                .as("Fifth student should be Brown")
+                .isEqualTo("Brown");
+
+        softly.assertAll();
+        logger.info("sortByNameDesc test completed successfully");
+    }
+
+    @Test
+    @DisplayName("sortByGroup should sort by group, then last name, then first name")
+    void testSortByGroup() {
+        logger.info("Testing sortByGroup");
+
+        List<Student> sorted = studentRepository.sortByGroup();
+
+        assertThat(sorted)
+                .as("Should return all students")
+                .hasSize(5);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        // Group CS comes before IT (alphabetically: КО21-23 < ІН22-23)
+        softly.assertThat(sorted.get(0).getGroup().getFullName())
+                .as("First three students should be from CS group")
+                .isEqualTo(groupCS.getFullName());
+
+        softly.assertThat(sorted.get(1).getGroup().getFullName())
+                .as("Second student should be from CS group")
+                .isEqualTo(groupCS.getFullName());
+
+        softly.assertThat(sorted.get(2).getGroup().getFullName())
+                .as("Third student should be from CS group")
+                .isEqualTo(groupCS.getFullName());
+
+        // Within CS group: Johnson < Smith < Williams
+        softly.assertThat(sorted.get(0).getLastName())
+                .as("First CS student should be Johnson")
+                .isEqualTo("Johnson");
+
+        softly.assertThat(sorted.get(1).getLastName())
+                .as("Second CS student should be Smith")
+                .isEqualTo("Smith");
+
+        softly.assertThat(sorted.get(2).getLastName())
+                .as("Third CS student should be Williams")
+                .isEqualTo("Williams");
+
+        // IT group students
+        softly.assertThat(sorted.get(3).getGroup().getFullName())
+                .as("Fourth student should be from IT group")
+                .isEqualTo(groupIT.getFullName());
+
+        softly.assertThat(sorted.get(4).getGroup().getFullName())
+                .as("Fifth student should be from IT group")
+                .isEqualTo(groupIT.getFullName());
+
+        softly.assertAll();
+        logger.info("sortByGroup test completed successfully");
+    }
+
+    @Test
+    @DisplayName("sortByName should not modify the original repository")
+    void testSortByNameDoesNotModifyRepository() {
+        logger.info("Testing that sortByName does not modify repository");
+
+        List<Student> originalOrder = studentRepository.getAll();
+        List<Student> sorted = studentRepository.sortByName();
+        List<Student> currentOrder = studentRepository.getAll();
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(currentOrder)
+                .as("Repository order should remain unchanged")
+                .isEqualTo(originalOrder);
+
+        softly.assertThat(sorted)
+                .as("Sorted list should be a different instance")
+                .isNotSameAs(currentOrder);
 
         softly.assertAll();
     }
 
-
-    @DisplayName("Test getting existing student testStudent1")
     @Test
-    void testFoundStudent() {
+    @DisplayName("sortByNameDesc should not modify the original repository")
+    void testSortByNameDescDoesNotModifyRepository() {
+        logger.info("Testing that sortByNameDesc does not modify repository");
+
+        List<Student> originalOrder = studentRepository.getAll();
+        List<Student> sorted = studentRepository.sortByNameDesc();
+        List<Student> currentOrder = studentRepository.getAll();
+
         SoftAssertions softly = new SoftAssertions();
 
-        String expectedId = testStudent1.getStudentId();
+        softly.assertThat(currentOrder)
+                .as("Repository order should remain unchanged")
+                .isEqualTo(originalOrder);
 
-        Optional<Student> found = studentRepository.findByIdentity(expectedId);
-        softly.assertThat(found.isPresent())
-                .as("Should find added student by ID %s", expectedId)
-                .isTrue();
-
-        if (found.isPresent()) {
-            Student foundStudent = found.get();
-            softly.assertThat(foundStudent.getFirstName())
-                    .as("Student first name should match")
-                    .isEqualTo(testStudent1.getFirstName());
-
-            softly.assertThat(foundStudent.getLastName())
-                    .as("Student last name should match")
-                    .isEqualTo(testStudent1.getLastName());
-
-            softly.assertThat(foundStudent.getGroup().getFullName())
-                    .as("Student group should match")
-                    .isEqualTo(testStudent1.getGroup().getFullName());
-        }
+        softly.assertThat(sorted)
+                .as("Sorted list should be a different instance")
+                .isNotSameAs(currentOrder);
 
         softly.assertAll();
     }
 
     @Test
-    @DisplayName("Test duplicate prevention")
-    void testDuplicatePrevention() {
+    @DisplayName("sortByGroup should not modify the original repository")
+    void testSortByGroupDoesNotModifyRepository() {
+        logger.info("Testing that sortByGroup does not modify repository");
+
+        List<Student> originalOrder = studentRepository.getAll();
+        List<Student> sorted = studentRepository.sortByGroup();
+        List<Student> currentOrder = studentRepository.getAll();
+
         SoftAssertions softly = new SoftAssertions();
 
-        // Try to add different student with same ID
-        Student duplicateIdStudent = new Student("Different", "different@email.com", "Name", testStudent1.getStudentId(),  testGroup2);
-        boolean duplicateIdAdd = studentRepository.add(duplicateIdStudent);
-        softly.assertThat(duplicateIdAdd)
-                .as("Adding student with duplicate ID should fail")
-                .isFalse();
+        softly.assertThat(currentOrder)
+                .as("Repository order should remain unchanged")
+                .isEqualTo(originalOrder);
 
-        softly.assertThat(studentRepository.size())
-                .as("Repository should contain only one student")
-                .isEqualTo(1);
+        softly.assertThat(sorted)
+                .as("Sorted list should be a different instance")
+                .isNotSameAs(currentOrder);
 
         softly.assertAll();
     }
 
     @Test
-    @DisplayName("Test null adding prevention")
-    void testNullPrevention() {
+    @DisplayName("sortByName with students having same last and first name should sort by email")
+    void testSortByNameWithIdenticalNames() {
+        logger.info("Testing sortByName with identical names");
+
+        StudentRepository repo = new StudentRepository();
+        Group group = new Group(21, "Test", 2023);
+
+        // Same last name and first name, different emails
+        Student student1 = new Student("John", "Doe", "john.doe.c@student.ua", "IDD001", group);
+        Student student2 = new Student("John", "Doe", "john.doe.a@student.ua", "IDD002", group);
+        Student student3 = new Student("John", "Doe", "john.doe.b@student.ua", "IDD003", group);
+
+        repo.add(student1);
+        repo.add(student2);
+        repo.add(student3);
+
+        List<Student> sorted = repo.sortByName();
+
         SoftAssertions softly = new SoftAssertions();
 
-        boolean added = studentRepository.add(null);
-        softly.assertThat(added)
-                .as("Second add of same student should fail")
-                .isFalse();
-    }
+        softly.assertThat(sorted.get(0).getEmail())
+                .as("First should be sorted by email: a")
+                .isEqualTo("john.doe.a@student.ua");
 
-    @ParameterizedTest(name = "Find by ID: {0} (should find: {1}) - {2}")
-    @MethodSource("studentIdsProvider")
-    @DisplayName("Test finding students by ID")
-    void testFindByIdentity(String studentId, boolean shouldFind, String description) {
-        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(sorted.get(1).getEmail())
+                .as("Second should be sorted by email: b")
+                .isEqualTo("john.doe.b@student.ua");
 
-        studentRepository.getItemsForTesting().add(testStudent2);
-
-        Optional<Student> result = studentRepository.findByIdentity(studentId);
-
-        softly.assertThat(result.isPresent())
-                .as("Find result for %s should be %s", description, shouldFind ? "present" : "absent")
-                .isEqualTo(shouldFind);
-
-        if (shouldFind && result.isPresent()) {
-            softly.assertThat(result.get().getStudentId())
-                    .as("Found student should have correct ID")
-                    .isEqualTo(studentId);
-        }
+        softly.assertThat(sorted.get(2).getEmail())
+                .as("Third should be sorted by email: c")
+                .isEqualTo("john.doe.c@student.ua");
 
         softly.assertAll();
+        logger.info("sortByName with identical names test completed");
     }
 
     @Test
-    @DisplayName("Test getAll operation")
-    void testGetAllStudents() {
+    @DisplayName("Sorting empty repository should return empty list")
+    void testSortingEmptyRepository() {
+        logger.info("Testing sorting on empty repository");
+
+        StudentRepository emptyRepo = new StudentRepository();
+
         SoftAssertions softly = new SoftAssertions();
 
-        GenericRepository<Student> emptyRepository = new GenericRepository<>(Student::getStudentId, "Student");
-        List<Student> emptyList = emptyRepository.getAll();
-        softly.assertThat(emptyList)
-                .as("Initially should return empty list")
+        softly.assertThat(emptyRepo.sortByName())
+                .as("sortByName on empty repository should return empty list")
                 .isEmpty();
 
+        softly.assertThat(emptyRepo.sortByNameDesc())
+                .as("sortByNameDesc on empty repository should return empty list")
+                .isEmpty();
 
-        studentRepository.getItemsForTesting().add(testStudent2);
-        studentRepository.getItemsForTesting().add(testStudent3);
-
-        List<Student> allStudents = studentRepository.getAll();
-
-        softly.assertThat(allStudents)
-                .as("Should return all added students")
-                .hasSize(3)
-                .contains(testStudent1, testStudent2, testStudent3);
-
-        allStudents.clear();
-
-        softly.assertThat(studentRepository.size())
-                .as("Repository size should not be affected by external list modification")
-                .isEqualTo(3);
-
-        softly.assertAll();
-    }
-
-
-    @DisplayName("Test removing students by identity")
-    void testRemoveByIdentity() {
-        SoftAssertions softly = new SoftAssertions();
-        int initialSize = studentRepository.size();
-
-        // Remove by identity
-        boolean removed = studentRepository.removeByIdentity(testStudent1.getStudentId());
-
-        softly.assertThat(removed)
-                .as("Should successfully remove student %s", testStudent1.getStudentId())
-                .isTrue();
-
-        softly.assertThat(studentRepository.size())
-                .as("Repository size should decrease by 1")
-                .isEqualTo(initialSize - 1);
-
-        softly.assertAll();
-    }
-
-    @Test
-    @DisplayName("Test removing non-existent student")
-    void testRemoveNonExistentStudent() {
-        SoftAssertions softly = new SoftAssertions();
-
-        studentRepository.add(testStudent1);
-        int initialSize = studentRepository.size();
-
-        boolean removed = studentRepository.removeByIdentity("ST999");
-
-        softly.assertThat(removed)
-                .as("Should not remove non-existent student")
-                .isFalse();
-
-        softly.assertThat(studentRepository.size())
-                .as("Repository size should remain unchanged")
-                .isEqualTo(initialSize);
-
-        softly.assertAll();
-    }
-
-    @Test
-    @DisplayName("Test removing with null identity")
-    void testRemoveNullIdentity() {
-        SoftAssertions softly = new SoftAssertions();
-
-        studentRepository.add(testStudent1);
-        int initialSize = studentRepository.size();
-
-        boolean removed = studentRepository.removeByIdentity(null);
-
-        softly.assertThat(removed)
-                .as("Should not remove with null identity")
-                .isFalse();
-
-        softly.assertThat(studentRepository.size())
-                .as("Repository size should remain unchanged")
-                .isEqualTo(initialSize);
-
-        softly.assertAll();
-    }
-
-    @Test
-    @DisplayName("Test clear operation")
-    void testClearRepository() {
-        SoftAssertions softly = new SoftAssertions();
-
-        // Add students
-        studentRepository.add(testStudent1);
-        studentRepository.add(testStudent2);
-        studentRepository.add(testStudent3);
-
-        softly.assertThat(studentRepository.size())
-                .as("Should have 3 students before clear")
-                .isEqualTo(3);
-
-        // Clear repository
-        studentRepository.clear();
-
-        softly.assertThat(studentRepository.size())
-                .as("Repository size should be 0 after clear")
-                .isEqualTo(0);
-
-        softly.assertThat(studentRepository.isEmpty())
-                .as("Repository should be empty after clear")
-                .isTrue();
-
-        softly.assertThat(studentRepository.getAll())
-                .as("GetAll should return empty list after clear")
+        softly.assertThat(emptyRepo.sortByGroup())
+                .as("sortByGroup on empty repository should return empty list")
                 .isEmpty();
 
         softly.assertAll();
+        logger.info("Empty repository sorting test completed");
     }
 
+    @Test
+    @DisplayName("Sorting single student should return list with that student")
+    void testSortingSingleStudent() {
+        logger.info("Testing sorting with single student");
 
+        StudentRepository singleRepo = new StudentRepository();
+        Group group = new Group(21, "Test", 2023);
+        Student student = new Student("Alice", "Smith", "alice@student.ua", "IDD001", group);
+        singleRepo.add(student);
+
+        SoftAssertions softly = new SoftAssertions();
+
+        softly.assertThat(singleRepo.sortByName())
+                .as("sortByName with single student")
+                .hasSize(1)
+                .containsExactly(student);
+
+        softly.assertThat(singleRepo.sortByNameDesc())
+                .as("sortByNameDesc with single student")
+                .hasSize(1)
+                .containsExactly(student);
+
+        softly.assertThat(singleRepo.sortByGroup())
+                .as("sortByGroup with single student")
+                .hasSize(1)
+                .containsExactly(student);
+
+        softly.assertAll();
+        logger.info("Single student sorting test completed");
+    }
 }

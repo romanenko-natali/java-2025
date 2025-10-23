@@ -17,7 +17,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
      * Sort subjects by credits in descending order
      */
     public List<Subject> sortByCreditsDesc() {
-        List<Subject> allSubjects = getAll(); // get a copy of items
+        List<Subject> allSubjects = getAll();
         allSubjects.sort(Comparator.comparing(Subject::credits).reversed());
         logger.info("Sorted " + "Subject" + " by credits in descending order");
         return allSubjects;
