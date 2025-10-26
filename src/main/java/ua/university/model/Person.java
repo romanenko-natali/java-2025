@@ -57,8 +57,9 @@ public class Person implements Comparable<Person> {
     }
 
     public void setEmail(String email) {
+        email = PersonUtils.formatEmail(email);
         PersonUtils.validateEmail(email);
-        this.email = PersonUtils.formatEmail(email);
+        this.email = email;
         logger.debug("Set email='{}'", this.email);
     }
 

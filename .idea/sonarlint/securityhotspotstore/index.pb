@@ -24,7 +24,5 @@ i
 9src/main/java/ua/university/parser/SubjectFileParser.java,6/7/67d8dbfad958db98694581a7327378f123a5ef11
 e
 5src/test/java/ua/university/util/PersonUtilsTest.java,6/8/68d37262c95377d512d8870e28f987ab9c79d71f
-a
-1src/test/java/ua/university/model/PersonTest.java,4/9/490cd29154798c9aea708b71700cbf8518806f46
 <
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
