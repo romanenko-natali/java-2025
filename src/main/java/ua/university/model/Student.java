@@ -2,13 +2,14 @@ package ua.university.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.university.repository.Identity;
 import ua.university.util.PersonUtils;
 import ua.university.util.StudentUtils;
 
 import java.util.Comparator;
 import java.util.Objects;
 
-public class Student extends Person {
+public class Student extends Person implements Identity {
 
     private static final Logger logger = LoggerFactory.getLogger(Student.class);
 
@@ -103,5 +104,10 @@ public class Student extends Person {
             return STUDENT_COMPARATOR.compare(this, student);
         }
         return super.compareTo(other);
+    }
+
+    @Override
+    public String getIdentity() {
+        return studentId;
     }
 }

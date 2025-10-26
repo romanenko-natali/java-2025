@@ -68,3 +68,10 @@ public class StudentRepository extends GenericRepository<Student> {
         return allStudents;
     }
 }
+
+class StudentRepository2 extends GenericRepositoryForInterface<Student>{
+
+    public StudentRepository2(String entityType) {
+        super(entityType);
+    }
+}

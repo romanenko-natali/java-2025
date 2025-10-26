@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import ua.university.exception.InvalidDataException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -41,14 +42,29 @@ class PersonTest {
                     () -> String.format("Expected email to be '%s' but was '%s'", expectedEmail, person.getEmail()));
         }
 
-        @Test
-        @DisplayName("Constructor should not set invalid fields")
-        void testConstructorWithInvalidData() {
-            Person person = new Person("", "validname", "invalid-email");
+        @ParameterizedTest
+        @CsvSource({
+                "'', validname, valid@example.com, Invalid name",
+                "validname, '', valid@example.com, Invalid name",
+                "validname, validname, invalid-email, Invalid email",
+                "validname, validname, @example.com, Invalid email",
+                "validname, validname, test@, Invalid email"
+        })
+        @DisplayName("Constructor should throw exception for invalid data")
+        void testConstructorWithInvalidData(String firstName, String lastName, String email, String expectedMessagePart) {
+            // Handle "null" string as actual null
+            String actualFirst = "null".equals(firstName) ? null : firstName;
+            String actualLast = "null".equals(lastName) ? null : lastName;
+            String actualEmail = "null".equals(email) ? null : email;
 
-            assertNull(person.getFirstName(), "Expected firstName to be null when invalid name provided");
-            assertEquals("Validname", person.getLastName(), "Expected lastName to be set when valid");
-            assertNull(person.getEmail(), "Expected email to be null when invalid email provided");
+            InvalidDataException exception = assertThrows(InvalidDataException.class,
+                    () -> new Person(actualFirst, actualLast, actualEmail),
+                    () -> String.format("Expected InvalidDataException for: firstName='%s', lastName='%s', email='%s'",
+                            actualFirst, actualLast, actualEmail));
+
+            assertTrue(exception.getMessage().contains(expectedMessagePart),
+                    () -> String.format("Exception message '%s' should contain '%s'",
+                            exception.getMessage(), expectedMessagePart));
         }
     }
 
@@ -69,8 +85,8 @@ class PersonTest {
         @DisplayName("Fields should be protected")
         void testFieldsAreProtected(String fieldName) throws NoSuchFieldException {
             var field = Person.class.getDeclaredField(fieldName);
-            assertTrue(Modifier.isProtected(field.getModifiers()),
-                    () -> String.format("Expected field '%s' to be protected, but was: %s",
+            assertTrue(Modifier.isPrivate(field.getModifiers()),
+                    () -> String.format("Expected field '%s' to be private, but was: %s",
                             fieldName, Modifier.toString(field.getModifiers())));
         }
     }
@@ -305,51 +321,21 @@ class PersonTest {
                     "null, validname",
                     "validname, null"
             })
-            @DisplayName("Should return null for invalid names")
+            @DisplayName("Should throw InvalidDataException for invalid names")
             void testCreatePersonWithInvalidNames(String firstName, String lastName) {
                 // Handle "null" string as actual null
                 String actualFirst = "null".equals(firstName) ? null : firstName;
                 String actualLast = "null".equals(lastName) ? null : lastName;
 
-                Person person = Person.createPerson(actualFirst, actualLast);
+                InvalidDataException exception = assertThrows(InvalidDataException.class,
+                        () -> Person.createPerson(actualFirst, actualLast),
+                        () -> String.format("Expected InvalidDataException for invalid names '%s' and '%s'",
+                                actualFirst, actualLast));
 
-                assertNull(person,
-                        () -> String.format("Expected null person for invalid names '%s' and '%s'", actualFirst, actualLast));
+                assertNotNull(exception.getMessage(), "Exception message should not be null");
             }
 
-            @Test
-            @DisplayName("Should return null when both names are null")
-            void testCreatePersonWithBothNamesNull() {
-                Person person = Person.createPerson(null, null);
-
-                assertNull(person, "Expected null person when both names are null");
-            }
         }
-
-//        @Nested
-//        @DisplayName("toString Tests")
-//        class ToStringTests {
-//
-//            @Test
-//            @DisplayName("Should format toString correctly with all fields")
-//            void testToStringWithAllFields() {
-//                Person person = new Person("John", "Doe", "john@domain.com");
-//                String expectedString = "Person{firstName='John', lastName='Doe', email='john@domain.com'}";
-//
-//                assertEquals(expectedString, person.toString(),
-//                        () -> String.format("Expected toString to be '%s' but was '%s'", expectedString, person.toString()));
-//            }
-//
-//            @Test
-//            @DisplayName("Should format toString correctly with null fields")
-//            void testToStringWithNullFields() {
-//                Person person = new Person();
-//                String expectedString = "Person{firstName='null', lastName='null', email='null'}";
-//
-//                assertEquals(expectedString, person.toString(),
-//                        () -> String.format("Expected toString to be '%s' but was '%s'", expectedString, person.toString()));
-//            }
-//        }
 
         @Nested
         @DisplayName("equals and hashCode Tests")
