@@ -1,5 +1,6 @@
 package ua.university.service;
 
+import ua.university.model.Grade;
 import ua.university.model.Student;
 import ua.university.model.StudentGrade;
 
@@ -8,12 +9,14 @@ import java.util.stream.Collectors;
 
 public class ReportGenerator {
 
+    private ReportGenerator() { }
+
     public static String formatExamResult(StudentGrade studentGrade) {
         return switch (studentGrade.examType()) {
-            case EXAM -> "Іспит: " + studentGrade.grade() + " (" + studentGrade.points() + " балів)";
-            case DIFFERENTIATED_CREDIT -> "Диф. залік: " + studentGrade.grade();
-            case CREDIT -> studentGrade.grade().isPass() ? "Залік: зараховано" : "Залік: не зараховано";
-            case COURSEWORK -> "Курсова робота: " + studentGrade.grade();
+            case EXAM -> "Іспит: " + Grade.fromPoints(studentGrade.points()) + " (" + studentGrade.points() + " балів)";
+            case DIFFERENTIATED_CREDIT -> "Диф. залік: " + Grade.fromPoints(studentGrade.points());
+            case CREDIT -> Grade.fromPoints(studentGrade.points()).isPass() ? "Залік: зараховано" : "Залік: не зараховано";
+            case COURSEWORK -> "Курсова робота: " + Grade.fromPoints(studentGrade.points());
             case LABORATORY -> "Лабораторна: " + studentGrade.points() + " балів";
         };
     }
@@ -22,7 +25,7 @@ public class ReportGenerator {
         StringBuilder report = new StringBuilder();
 
         for (StudentGrade grade : grades) {
-            String status = switch (grade.grade()) {
+            String status = switch (Grade.fromPoints(grade.points())) {
                 case A -> "★ Відмінно";
                 case B, C -> "✓ Добре";
                 case D -> "○ Задовільно";
@@ -54,7 +57,7 @@ public class ReportGenerator {
                 .orElse(0.0);
 
         long passed = Arrays.stream(allGrades)
-                .filter(g -> g.grade().isPass())
+                .filter(g -> Grade.fromPoints(g.points()).isPass())
                 .count();
 
         long failed = allGrades.length - passed;

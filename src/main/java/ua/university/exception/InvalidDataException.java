@@ -2,15 +2,15 @@ package ua.university.exception;
 
 public class InvalidDataException extends RuntimeException {
 
-    public InvalidDataException(){
+    public InvalidDataException() {
         super();
     }
 
-    public InvalidDataException(String message){
+    public InvalidDataException(String message) {
         super(message);
     }
 
-    public InvalidDataException(Throwable e){
+    public InvalidDataException(Throwable e) {
         super(e);
     }
 

@@ -48,7 +48,7 @@ public class Course implements Comparable<Course> {
             throw new InvalidDataException("None of the objects (subject, teacher, or group) should be null.");
         }
         logger.info("Course created successfully: subject={}, teacher={}, group={}",
-                subject.name(), teacher.getFullName(), group.getFullName());
+                subject, teacher, group);
         return new Course(subject, teacher, group);
     }
 

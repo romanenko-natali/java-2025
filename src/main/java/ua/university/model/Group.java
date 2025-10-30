@@ -48,13 +48,13 @@ public record Group(
         }
 
         String fullName = specialty.substring(0, 2).toUpperCase() + number + "-" + (startYear % 100);
-        logger.debug("Generated full name: {0}", fullName);
+        logger.debug("Generated full name: {}", fullName);
         return fullName;
     }
 
     public boolean isGraduated() {
         boolean graduated = getCurrentYear() > 4;
-        logger.debug("Group {0} graduation status: {1}", getFullName(), graduated);
+        logger.debug("Group {} graduation status: {}", getFullName(), graduated);
         return graduated;
     }
 

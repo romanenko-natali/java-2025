@@ -1,5 +1,7 @@
 package ua.university.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.university.util.PersonUtils;
@@ -19,7 +21,13 @@ public class Teacher extends Person {
                     .thenComparing(Teacher::getPosition)
                     .thenComparing(Person.PERSON_COMPARATOR);
 
-    public Teacher(String firstName, String lastName, String email, String department, String position) {
+    @JsonCreator
+    public Teacher(
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("email") String email,
+            @JsonProperty("department") String department,
+            @JsonProperty("position") String position) {
         super(firstName, lastName, email);
         setDepartment(department);
         setPosition(position);

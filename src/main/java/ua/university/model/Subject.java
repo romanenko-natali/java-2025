@@ -1,10 +1,12 @@
 package ua.university.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.university.exception.InvalidDataException;
 import ua.university.util.SubjectUtils;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record Subject(String name, int credits) implements Comparable<Subject> {
 
     private static final Logger logger = LoggerFactory.getLogger(Subject.class);

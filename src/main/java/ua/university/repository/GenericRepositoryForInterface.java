@@ -7,11 +7,9 @@ import java.util.Optional;
 public class GenericRepositoryForInterface<T extends Identity> {
 
     private final List<T> items;
-    private final String entityType;
 
-    public GenericRepositoryForInterface(String entityType) {
+    public GenericRepositoryForInterface() {
         items = new ArrayList<>();
-        this.entityType = entityType;
     }
 
     public boolean add(T item) {

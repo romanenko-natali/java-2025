@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'jacoco'
+    id 'checkstyle'
 }
 
 group 'org.example'
@@ -7,6 +9,32 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+checkstyle {
+    toolVersion = '10.12.5'
+    configFile = file("config/checkstyle/checkstyle.xml")
+    ignoreFailures = false
+    maxWarnings = 0
+}
+
+checkstyleMain {
+    reports {
+        xml.required = false
+        html.required = true
+        html.outputLocation = file("$buildDir/reports/checkstyle/main.html")
+    }
+}
+
+checkstyleTest {
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 dependencies {
@@ -21,8 +49,25 @@ dependencies {
 
     implementation 'org.slf4j:slf4j-api:2.0.12'
     runtimeOnly 'ch.qos.logback:logback-classic:1.4.14'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.0'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0'
+
 }
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required = false
+        html.required = true
+        csv.required = false
+    }
 }

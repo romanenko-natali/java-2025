@@ -14,7 +14,7 @@ public class GenericRepository<T> {
 
     protected final List<T> items;
     private final IdentityExtractor<T> identityExtractor;
-    private final String entityType;
+    protected final String entityType;
 
     public GenericRepository(IdentityExtractor<T> identityExtractor, String entityType) {
         this.items = new ArrayList<>();
@@ -56,9 +56,9 @@ public class GenericRepository<T> {
 
         boolean removed = items.remove(item); // Uses equals() internally
         if (removed) {
-            logger.info("Removed {}: {}", entityType, identityExtractor.extractIdentity(item));
+            logger.info("Removed {}: {}", entityType, item);
         } else {
-            logger.warn("Failed to remove {}: {}", entityType, identityExtractor.extractIdentity(item));
+            logger.warn("Failed to remove {}: {}", entityType, item);
         }
         return removed;
     }

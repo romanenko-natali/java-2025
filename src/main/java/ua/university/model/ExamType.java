@@ -2,6 +2,7 @@ package ua.university.model;
 
 import ua.university.exception.InvalidDataException;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public enum ExamType {
@@ -37,12 +38,13 @@ public enum ExamType {
 
     public boolean isWrittenExam() {
         boolean result = this == EXAM || this == DIFFERENTIATED_CREDIT;
-        logger.fine("Checking if " + this.name() + " is written exam: " + result);
+        logger.log(Level.FINE, () ->
+                "Checking if " + this.name() + " is written exam: " + result);
         return result;
     }
 
     public static ExamType parseExamType(String value) throws InvalidDataException {
-        logger.info("Attempting to parse ExamType from value: " + value);
+        logger.log(Level.INFO, () -> "Attempting to parse ExamType from value: " + value);
 
         if (value == null) {
             logger.warning("Attempted to parse null ExamType value");
@@ -51,7 +53,7 @@ public enum ExamType {
 
         try {
             ExamType result = ExamType.valueOf(value.toUpperCase().trim());
-            logger.info("Successfully parsed ExamType: " + result.name());
+            logger.log(Level.INFO, () -> "Successfully parsed ExamType: " + result);
             return result;
         } catch (IllegalArgumentException e) {
             logger.severe("Failed to parse ExamType: '" + value + "' - invalid value");

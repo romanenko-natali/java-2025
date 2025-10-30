@@ -18,8 +18,8 @@ public class GroupUtils {
     }
 
 
-    public static boolean isValidStartYear(int year){
-        return ValidationHelper.isNumberBetween (year, LocalDate.now().getYear()-10, LocalDate.now().getYear());
+    public static boolean isValidStartYear(int year) {
+        return ValidationHelper.isNumberBetween (year, LocalDate.now().getYear() - 10, LocalDate.now().getYear());
     }
 
     /**
@@ -94,7 +94,7 @@ public class GroupUtils {
     }
 
 
-    public static String formatGroupFullNumber(Group group){
+    public static String formatGroupFullNumber(Group group) {
         return group.specialty().substring(0, 2).toUpperCase() + group.number() + "-" + group.startYear() % 100;
     }
 }

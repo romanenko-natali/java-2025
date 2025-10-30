@@ -1,5 +1,7 @@
 package ua.university.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.university.util.PersonUtils;
@@ -21,7 +23,11 @@ public class Person implements Comparable<Person> {
                     .thenComparing(Person::getLastName)
                     .thenComparing(Person::getEmail);
 
-    public Person(String firstName, String lastName, String email) {
+    @JsonCreator
+    public Person(
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("email") String email) {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
@@ -101,11 +107,11 @@ public class Person implements Comparable<Person> {
     }
 }
 
-class PersonByEmailComparator implements Comparator<Person> {
-
-    @Override
-    public int compare(Person o1, Person o2) {
-        return o2.getEmail().compareTo(o1.getEmail());
-    }
-}
+//class PersonByEmailComparator implements Comparator<Person> {
+//
+//    @Override
+//    public int compare(Person o1, Person o2) {
+//        return o2.getEmail().compareTo(o1.getEmail());
+//    }
+//}
 

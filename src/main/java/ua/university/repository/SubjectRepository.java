@@ -22,7 +22,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
     public List<Subject> sortByCreditsDesc() {
         List<Subject> allSubjects = getAll();
         allSubjects.sort(Comparator.comparing(Subject::credits).reversed());
-        logger.info("Sorted " + "Subject" + " by credits in descending order");
+        logger.info("Sorted " + entityType + " by credits in descending order");
         return allSubjects;
     }
 
@@ -51,7 +51,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
         String searchTerm = partialName.trim().toLowerCase();
         List<Subject> results = getAll().stream()
                 .filter(subject -> subject.name().toLowerCase().contains(searchTerm))
-                .collect(Collectors.toList());
+                .toList();
 
         logger.info("Found {} subjects containing '{}' in name", results.size(), partialName);
         return results;
@@ -72,7 +72,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
 
         List<Subject> results = getAll().stream()
                 .filter(subject -> subject.credits() >= minCredits && subject.credits() <= maxCredits)
-                .collect(Collectors.toList());
+                .toList();
 
         logger.info("Found {} subjects with credits between {} and {}", results.size(), minCredits, maxCredits);
         return results;
@@ -92,7 +92,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
 
         List<Subject> results = getAll().stream()
                 .filter(subject -> subject.getDifficultyLevel().equalsIgnoreCase(difficultyLevel.trim()))
-                .collect(Collectors.toList());
+                .toList();
 
         logger.info("Found {} subjects with difficulty level '{}'", results.size(), difficultyLevel);
         return results;
@@ -107,7 +107,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
     public List<Subject> findByMinCredits(int minCredits) {
         List<Subject> results = getAll().stream()
                 .filter(subject -> subject.credits() >= minCredits)
-                .collect(Collectors.toList());
+                .toList();
 
         logger.info("Found {} subjects with credits >= {}", results.size(), minCredits);
         return results;
@@ -148,7 +148,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
 
         List<Subject> results = allSubjects.stream()
                 .filter(subject -> subject.credits() == maxCredits)
-                .collect(Collectors.toList());
+                .toList();
 
         logger.info("Found {} subject(s) with max credits: {} credits", results.size(), maxCredits);
         return results;
@@ -161,21 +161,16 @@ public class SubjectRepository extends GenericRepository<Subject> {
      * one is returned arbitrarily (non-deterministic).
      * This method is primarily for demonstrating the reduce operation.
      * For production use, consider {@link #getAllSubjectsWithMaxCredits()} instead.
-     * <p>
      *
      * @return Optional containing one subject with max credits, or empty if no subjects
      */
     public Optional<Subject> getSubjectWithMaxCredits() {
         Optional<Subject> result = getAll().stream()
                 .reduce((s1, s2) -> s1.credits() > s2.credits() ? s1 : s2);
+//        Optional<Subject> result = getAll().stream()
+//                .max(Comparator.comparingInt(Subject::credits));
 
-        if (result.isPresent()) {
-            logger.info("Subject with max credits: {} ({} credits)",
-                    result.get().name(), result.get().credits());
-            logger.debug("Note: If multiple subjects have max credits, one is returned arbitrarily");
-        } else {
-            logger.info("No subjects found");
-        }
+        logger.debug("getSubjectWithMaxCredits result: {}", result.orElse(null));
 
         return result;
     }
@@ -207,7 +202,7 @@ public class SubjectRepository extends GenericRepository<Subject> {
         List<String> names = getAll().stream()
                 .map(Subject::name)
                 .map(String::toUpperCase)
-                .collect(Collectors.toList());
+                .toList();
 
         logger.info("Retrieved {} subject names in uppercase", names.size());
         return names;

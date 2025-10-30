@@ -1,5 +1,6 @@
 package ua.university.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.university.exception.InvalidDataException;
@@ -12,11 +13,10 @@ public record StudentGrade(
         Student student,
         Subject subject,
         Teacher teacher,
-        Grade grade,
         int points,
         ExamType examType,
         String semester,
-        LocalDate examDate
+        @JsonFormat(pattern = "yyyy-MM-dd") LocalDate examDate
 ) implements Comparable<StudentGrade> {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentGrade.class);
@@ -27,7 +27,6 @@ public record StudentGrade(
         if (student == null) errors.add("Student must not be null");
         if (subject == null) errors.add("Subject must not be null");
         if (teacher == null) errors.add("Teacher must not be null");
-        if (grade == null) errors.add("Grade must not be null");
         if (points < 0 || points > 100) errors.add("Points must be between 0 and 100: " + points);
         if (examType == null) errors.add("Exam type must not be null");
         if (semester == null || semester.isBlank()) errors.add("Semester must not be null or empty");
@@ -45,9 +44,8 @@ public record StudentGrade(
             throw new InvalidDataException(errorMessage);
         }
 
-        logger.info("Created StudentGrade: {} | {} | {} | {} points | {} | {} | {}",
-                student.getFullName(), subject.name(), teacher.getFullName(),
-                points, grade, examType, semester);
+        logger.info("Created StudentGrade: {} | {} | {} | {} points | {} | {} ",
+                student, subject, teacher, points, examType, semester);
     }
 
     @Override
