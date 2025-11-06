@@ -94,7 +94,7 @@ public class PersonUtilsTest {
         @Test
         @DisplayName("Should handle special characters")
         void testSpecialCharacters() {
-            assertEquals("Hello-world", PersonUtils.capitalizeText("hello-world"));
+            assertEquals("Hello-World", PersonUtils.capitalizeText("hello-world"));
             assertEquals("Hello123", PersonUtils.capitalizeText("hello123"));
             assertEquals("123hello", PersonUtils.capitalizeText("123hello"));
         }

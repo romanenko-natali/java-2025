@@ -26,11 +26,27 @@ public final class PersonUtils {
             return "";
         }
 
-        String result = trimmed.substring(0, 1).toUpperCase() +
-                trimmed.substring(1).toLowerCase();
+        // Розділяємо за пробілами, дефісами та апострофами, зберігаючи роздільники
+        String[] parts = trimmed.split("(?<=[-\\s'])|(?=[-\\s'])");
 
-        logger.debug("capitalizeText: input='{}' -> result='{}'", text, result);
-        return result;
+        StringBuilder result = new StringBuilder();
+
+        for (String part : parts) {
+            if (part.isEmpty()) {
+                continue;
+            }
+
+            if (part.matches("[-\\s']")) {
+                result.append(part);
+            } else {
+                result.append(part.substring(0, 1).toUpperCase())
+                        .append(part.substring(1).toLowerCase());
+            }
+        }
+
+        String finalResult = result.toString();
+        logger.debug("capitalizeText: input='{}' -> result='{}'", text, finalResult);
+        return finalResult;
     }
 
     public static String formatName(String firstName, String lastName) {
@@ -63,8 +79,8 @@ public final class PersonUtils {
 
         for (String name : names) {
             if (name == null || name.trim().isEmpty()) {
-                logger.error("Invalid name in email generation: '{}'", name);
-                throw new InvalidDataException("Names must not be null or empty");
+                logger.error("Invalid value in email generation: '{}'", name);
+                throw new InvalidDataException("Names and studentID must not be null or empty");
             }
         }
 

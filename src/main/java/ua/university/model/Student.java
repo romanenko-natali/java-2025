@@ -31,10 +31,8 @@ public class Student extends Person {
 
     public Student(String firstName, String lastName, String email, String studentId, Group group) {
         super(firstName, lastName, email);
-        this.studentId = studentId;
+        this.studentId = studentId != null ? studentId.trim() : "";
         this.group = group;
-
-        ValidationUtils.validate(this);
 
         logger.info("Created Student: {}", this);
     }
@@ -86,7 +84,7 @@ public class Student extends Person {
 
     @Override
     protected String getFullName() {
-        return super.getFullName() + " (Student ID: " + studentId + ")";
+        return super.getFullName() + " (ID: " + studentId + ")";
     }
 
     private String formatStudentId(String studentId) {
@@ -132,13 +130,12 @@ public class Student extends Person {
         if (this == o) return true;
         if (!(o instanceof Student student)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equals(studentId, student.studentId) &&
-                Objects.equals(group, student.group);
+        return Objects.equals(studentId, student.studentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), studentId, group);
+        return Objects.hash(super.hashCode(), studentId);
     }
 
     @Override
