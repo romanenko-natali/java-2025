@@ -2,10 +2,12 @@ package ua.university.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.university.exception.InvalidDataException;
 import ua.university.util.PersonUtils;
-import ua.university.util.TeacherUtils;
+import ua.university.util.ValidationUtils;
 
 import java.util.*;
 
@@ -13,8 +15,19 @@ public class Teacher extends Person {
 
     private static final Logger logger = LoggerFactory.getLogger(Teacher.class);
 
-    private String department;
-    private String position;
+    @NotBlank(message = "Department cannot be null or blank")
+    @Pattern(
+            regexp = "^[a-zA-Z\\s\\-']{2,100}$",
+            message = "Department must be 2-100 characters long and contain only letters, spaces, hyphens, or apostrophes"
+    )
+    protected String department;
+
+    @NotBlank(message = "Position cannot be null or blank")
+    @Pattern(
+            regexp = "^[a-zA-Z\\s\\-']{2,50}$",
+            message = "Position must be 2-50 characters long and contain only letters, spaces, hyphens, or apostrophes"
+    )
+    protected String position;
 
     public static final Comparator<Teacher> TEACHER_COMPARATOR_BY_DEPARTMENT =
             Comparator.comparing(Teacher::getDepartment)
@@ -39,9 +52,20 @@ public class Teacher extends Person {
     }
 
     public void setDepartment(String department) {
-        TeacherUtils.validateDepartment(department);
-        this.department = department.trim();
-        logger.debug("Set department='{}' for {}", this.department, getFullName());
+        if (department != null) {
+            department = department.trim();
+        }
+
+        String oldValue = this.department;
+        this.department = department;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.debug("Set department='{}' for {}", this.department, getFullName());
+        } catch (InvalidDataException e) {
+            this.department = oldValue;
+            throw e;
+        }
     }
 
     public String getPosition() {
@@ -49,9 +73,20 @@ public class Teacher extends Person {
     }
 
     public void setPosition(String position) {
-        TeacherUtils.validatePosition(position);
-        this.position = position.trim();
-        logger.debug("Set position='{}' for {}", this.position, getFullName());
+        if (position != null) {
+            position = position.trim();
+        }
+
+        String oldValue = this.position;
+        this.position = position;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.debug("Set position='{}' for {}", this.position, getFullName());
+        } catch (InvalidDataException e) {
+            this.position = oldValue;
+            throw e;
+        }
     }
 
     @Override
@@ -61,14 +96,11 @@ public class Teacher extends Person {
 
     public static Teacher createTeacher(String firstName, String lastName,
                                         String department, String position) {
-        PersonUtils.validateName(firstName);
-        PersonUtils.validateName(lastName);
-        TeacherUtils.validateDepartment(department);
-        TeacherUtils.validatePosition(position);
-
         String email = PersonUtils.generateEmailFromNames(firstName, lastName);
+        Teacher teacher = new Teacher(firstName, lastName, email, department, position);
+        ValidationUtils.validate(teacher);
         logger.info("Factory method: created Teacher with email='{}'", email);
-        return new Teacher(firstName, lastName, email, department, position);
+        return teacher;
     }
 
     @Override
@@ -95,5 +127,4 @@ public class Teacher extends Person {
     public int hashCode() {
         return Objects.hash(super.hashCode(), department, position);
     }
-
 }

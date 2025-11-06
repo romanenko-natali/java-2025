@@ -3,6 +3,8 @@ package ua.university.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.university.exception.AlreadyExistsException;
+import ua.university.exception.InvalidDataException;
 
 import java.util.*;
 
@@ -25,17 +27,20 @@ public class GenericRepository<T> {
 
     /**
      * Add an item to the repository
+     *
+     * @throws InvalidDataException if item is null
+     * @throws AlreadyExistsException if item with this identity already exists
      */
     public boolean add(T item) {
         if (item == null) {
-            logger.warn("Attempted to add null {}", entityType);
-            return false;
+            throw new InvalidDataException(entityType + " cannot be null");
         }
 
         String identity = identityExtractor.extractIdentity(item);
         if (findByIdentity(identity).isPresent()) {
-            logger.warn("Cannot add {} - already exists with identity: {}", entityType, identity);
-            return false;
+            String errorMsg = String.format("%s already exists with identity: %s", entityType, identity);
+            logger.error(errorMsg);
+            throw new AlreadyExistsException(errorMsg);
         }
 
         boolean added = items.add(item);

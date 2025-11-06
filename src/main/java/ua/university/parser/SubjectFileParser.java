@@ -77,7 +77,7 @@ public class SubjectFileParser {
 
         try {
             int credits = Integer.parseInt(parts[1].trim());
-            return new Subject(name, credits);
+            return Subject.createValidSubject(name, credits);
         } catch (NumberFormatException e) {
             throw new InvalidDataException(
                     "Line " + lineNumber + ": Invalid credits format: " + parts[1], e);

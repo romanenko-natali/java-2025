@@ -1,6 +1,7 @@
 package ua.university;
 
 import ua.university.config.AppConfig;
+import ua.university.exception.InvalidDataException;
 import ua.university.model.*;
 import ua.university.persistence.PersistenceManager;
 import ua.university.exception.DataSerializationException;
@@ -19,22 +20,30 @@ public class Main {
 
     public static void main(String[] args) throws DataSerializationException {
 
-        AppConfig config = new AppConfig();
-        PersistenceManager manager = new PersistenceManager(config);
+        try {
+
+            Group g = new Group(23, "kkk", 78);
+        }
+        catch (InvalidDataException e){
+            System.out.println(e.getMessage());
+        }
+
+//        AppConfig config = new AppConfig();
+//        PersistenceManager manager = new PersistenceManager(config);
 
 //        demonstrateSubjectSerialization(config, manager);
 
-        System.out.println("\n" + "=".repeat(70) + "\n");
+//        System.out.println("\n" + "=".repeat(70) + "\n");
 
 //        demonstrateTeacherSerialization(config, manager);
-        Subject subject = new Subject("Mathematics", 5);
-        Teacher t = new Teacher("John", "Doe", "john.doe@university.edu",
-                "Mathematics", "Professor");
-        Group group = new Group(1, "Applied Math", 2025);
-        Student student = new Student("Oleh", "Yakovenko", "STU001", group);
-        StudentGrade sg = new StudentGrade(student, subject, t, 7, ExamType.EXAM, "2-2025", LocalDate.now());
-        DataSerializer<StudentGrade> ser = new JsonDataSerializer<>();
-        ser.serialize(List.of(sg), "data.json");
+//        Subject subject = new Subject("Mathematics", 5);
+//        Teacher t = new Teacher("John", "Doe", "john.doe@university.edu",
+//                "Mathematics", "Professor");
+//        Group group = new Group(1, "Applied Math", 2025);
+//        Student student = new Student("Oleh", "Yakovenko", "STU001", group);
+//        StudentGrade sg = new StudentGrade(student, subject, t, 7, ExamType.EXAM, "2-2025", LocalDate.now());
+//        DataSerializer<StudentGrade> ser = new JsonDataSerializer<>();
+//        ser.serialize(List.of(sg), "data.json");
     }
 
     private static void demonstrateSubjectSerialization(AppConfig config, PersistenceManager manager)

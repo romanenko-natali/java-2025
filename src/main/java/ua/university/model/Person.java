@@ -2,11 +2,13 @@ package ua.university.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.university.exception.InvalidDataException;
 import ua.university.util.PersonUtils;
+import ua.university.util.ValidationUtils;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -14,8 +16,22 @@ public class Person implements Comparable<Person> {
 
     private static final Logger logger = LoggerFactory.getLogger(Person.class);
 
+    @NotBlank(message = "First name cannot be null or blank")
+    @Pattern(
+            regexp = "^[\\p{L}\\s\\-']{2,50}$",
+            message = "First name must be 2-50 characters long and contain only letters, spaces, hyphens, or apostrophes"
+    )
     private String firstName;
+
+    @NotBlank(message = "Last name cannot be null or blank")
+    @Pattern(
+            regexp = "^[\\p{L}\\s\\-']{2,50}$",
+            message = "Last name must be 2-50 characters long and contain only letters, spaces, hyphens, or apostrophes"
+    )
     private String lastName;
+
+    @NotBlank(message = "Email cannot be null or blank")
+    @Email(message = "Email must be valid")
     private String email;
 
     public static final Comparator<Person> PERSON_COMPARATOR =
@@ -28,10 +44,17 @@ public class Person implements Comparable<Person> {
             @JsonProperty("firstName") String firstName,
             @JsonProperty("lastName") String lastName,
             @JsonProperty("email") String email) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        setEmail(email);
+        this.firstName = PersonUtils.capitalizeText(firstName);
+        this.lastName = PersonUtils.capitalizeText(lastName);
+        this.email = PersonUtils.formatEmail(email);
+
         logger.info("Created Person: {}", this);
+    }
+
+    public static Person createValidPerson(String firstName, String lastName, String email) {
+        Person person = new Person(firstName, lastName, email);
+        ValidationUtils.validate(person);
+        return person;
     }
 
     protected String getFullName() {
@@ -43,9 +66,17 @@ public class Person implements Comparable<Person> {
     }
 
     public void setFirstName(String firstName) {
-        PersonUtils.validateName(firstName);
-        this.firstName = PersonUtils.capitalizeText(firstName);
-        logger.debug("Set firstName='{}'", this.firstName);
+        String normalized = PersonUtils.capitalizeText(firstName != null ? firstName.trim() : null);
+        String oldValue = this.firstName;
+        this.firstName = normalized;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.debug("Set firstName='{}'", this.firstName);
+        } catch (InvalidDataException e) {
+            this.firstName = oldValue;
+            throw e;
+        }
     }
 
     public String getLastName() {
@@ -53,9 +84,17 @@ public class Person implements Comparable<Person> {
     }
 
     public void setLastName(String lastName) {
-        PersonUtils.validateName(lastName);
-        this.lastName = PersonUtils.capitalizeText(lastName);
-        logger.debug("Set lastName='{}'", this.lastName);
+        String normalized = PersonUtils.capitalizeText(lastName != null ? lastName.trim() : null);
+        String oldValue = this.lastName;
+        this.lastName = normalized;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.debug("Set lastName='{}'", this.lastName);
+        } catch (InvalidDataException e) {
+            this.lastName = oldValue;
+            throw e;
+        }
     }
 
     public String getEmail() {
@@ -63,19 +102,25 @@ public class Person implements Comparable<Person> {
     }
 
     public void setEmail(String email) {
-        email = PersonUtils.formatEmail(email);
-        PersonUtils.validateEmail(email);
-        this.email = email;
-        logger.debug("Set email='{}'", this.email);
+        String normalized = PersonUtils.formatEmail(email != null ? email.trim() : null);
+        String oldValue = this.email;
+        this.email = normalized;
+
+        try {
+            ValidationUtils.validate(this);
+            logger.debug("Set email='{}'", this.email);
+        } catch (InvalidDataException e) {
+            this.email = oldValue;
+            throw e;
+        }
     }
 
     public static Person createPerson(String firstName, String lastName) {
-        PersonUtils.validateName(firstName);
-        PersonUtils.validateName(lastName);
-
         String email = PersonUtils.generateEmailFromNames(firstName, lastName);
+        Person person = new Person(firstName, lastName, email);
+        ValidationUtils.validate(person);
         logger.info("Factory method: created Person with generated email '{}'", email);
-        return new Person(firstName, lastName, email);
+        return person;
     }
 
     @Override
@@ -101,17 +146,8 @@ public class Person implements Comparable<Person> {
         return Objects.hash(firstName, lastName, email);
     }
 
-        @Override
+    @Override
     public int compareTo(Person other) {
         return PERSON_COMPARATOR.compare(this, other);
     }
 }
-
-//class PersonByEmailComparator implements Comparator<Person> {
-//
-//    @Override
-//    public int compare(Person o1, Person o2) {
-//        return o2.getEmail().compareTo(o1.getEmail());
-//    }
-//}
-

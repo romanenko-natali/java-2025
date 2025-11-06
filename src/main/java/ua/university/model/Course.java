@@ -56,7 +56,7 @@ public class Course implements Comparable<Course> {
         String info = String.format("Course: %s | Teacher: %s | Group: %s | Credits: %d",
                 subject.name(),
                 PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()),
-                group.groupInfo(),
+                group.getFullName(),
                 subject.credits());
 
         logger.debug("Retrieved course info: {}", info);
@@ -66,7 +66,7 @@ public class Course implements Comparable<Course> {
     public String getIdentity() {
         return subject.name() + "-" +
                 PersonUtils.formatName(teacher.getFirstName(), teacher.getLastName()) + "-" +
-                group.groupInfo();
+                group.getFullName();
     }
 
     @Override
