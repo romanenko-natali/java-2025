@@ -4,10 +4,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.assertj.core.api.SoftAssertions;
+import ua.university.exception.AlreadyExistsException;
+import ua.university.exception.InvalidDataException;
 import ua.university.model.Group;
 import ua.university.model.Student;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -130,14 +133,22 @@ public class StudentGenericRepositoryTest {
         SoftAssertions softly = new SoftAssertions();
 
         // Try to add different student with same ID
-        Student duplicateIdStudent = new Student("Different", "Name", "different@email.com", testStudent1.getStudentId(), testGroup2);
-        boolean duplicateIdAdd = studentRepository.add(duplicateIdStudent);
-        softly.assertThat(duplicateIdAdd)
-                .as("Adding student with duplicate ID should fail")
-                .isFalse();
+        Student duplicateIdStudent = new Student(
+                "Different",
+                "Name",
+                "different@email.com",
+                testStudent1.getStudentId(),
+                testGroup2
+        );
+
+        softly.assertThatThrownBy(() -> studentRepository.add(duplicateIdStudent))
+                .as("Adding student with duplicate ID should throw AlreadyExistsException")
+                .isInstanceOf(AlreadyExistsException.class)
+                .hasMessageContaining("already exists")
+                .hasMessageContaining(testStudent1.getStudentId());
 
         softly.assertThat(studentRepository.size())
-                .as("Repository should contain only one student")
+                .as("Repository should still contain only one student")
                 .isEqualTo(1);
 
         softly.assertAll();
@@ -146,12 +157,9 @@ public class StudentGenericRepositoryTest {
     @Test
     @DisplayName("Test null adding prevention")
     void testNullPrevention() {
-        SoftAssertions softly = new SoftAssertions();
-
-        boolean added = studentRepository.add(null);
-        softly.assertThat(added)
-                .as("Second add of same student should fail")
-                .isFalse();
+        assertThatThrownBy(() -> studentRepository.add(null))
+                .isInstanceOf(InvalidDataException.class)
+                .hasMessageContaining("cannot be null");
     }
 
     @ParameterizedTest(name = "Find by ID: {0} (should find: {1}) - {2}")
@@ -233,7 +241,6 @@ public class StudentGenericRepositoryTest {
     void testRemoveNonExistentStudent() {
         SoftAssertions softly = new SoftAssertions();
 
-        studentRepository.add(testStudent1);
         int initialSize = studentRepository.size();
 
         boolean removed = studentRepository.removeByIdentity("ST999");
@@ -254,7 +261,6 @@ public class StudentGenericRepositoryTest {
     void testRemoveNullIdentity() {
         SoftAssertions softly = new SoftAssertions();
 
-        studentRepository.add(testStudent1);
         int initialSize = studentRepository.size();
 
         boolean removed = studentRepository.removeByIdentity(null);
@@ -276,7 +282,6 @@ public class StudentGenericRepositoryTest {
         SoftAssertions softly = new SoftAssertions();
 
         // Add students
-        studentRepository.add(testStudent1);
         studentRepository.add(testStudent2);
         studentRepository.add(testStudent3);
 

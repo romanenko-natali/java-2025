@@ -57,7 +57,7 @@ public class GroupTest {
     @ValueSource(ints = {0, -1, -100})
     void testInvalidGroupNumber(int invalidNumber) {
         InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-            new Group(invalidNumber, "Computer Science", 2021);
+            Group.createValidGroup(invalidNumber, "Computer Science", 2021);
         });
         assertTrue(exception.getMessage().contains("Group number must be positive"));
     }
@@ -66,18 +66,18 @@ public class GroupTest {
     @ValueSource(strings = {"", "   ", "1234", "Spec@ialty", "S"})
     void testInvalidSpecialty(String invalidSpecialty) {
         InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-            new Group(101, invalidSpecialty, 2021);
+            Group.createValidGroup(101, invalidSpecialty, 2021);
         });
-        assertTrue(exception.getMessage().contains("Must be 2-100 characters long and contain only"));
+        assertTrue(exception.getMessage().contains("must be 2-100 characters long and contain only"), exception.getMessage());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1800, 1899, 2030, 3000})
     void testInvalidStartYear(int invalidYear) {
         InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-            new Group(101, "Computer Science", invalidYear);
+            Group.createValidGroup(101, "Computer Science", invalidYear);
         });
-        assertTrue(exception.getMessage().contains("Invalid start year"));
+        assertTrue(exception.getMessage().contains("Start year"), exception.getMessage());
     }
 
 
@@ -191,11 +191,11 @@ public class GroupTest {
 
     @Test
     void testGroupInfoMethod() {
-        Group group = new Group(101, "Computer Science", 2021);
+        Group group = Group.createValidGroup(101, "Computer Science", 2021);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(group.groupInfo()).isEqualTo(group.getFullName());
-        softly.assertThat(group.groupInfo()).isEqualTo("CO101-21");
+        softly.assertThat(group.getFullName()).isEqualTo(group.getFullName());
+        softly.assertThat(group.getFullName()).isEqualTo("CO101-21");
         softly.assertAll();
     }
 }

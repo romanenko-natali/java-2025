@@ -44,11 +44,11 @@ class PersonTest {
 
         @ParameterizedTest
         @CsvSource({
-                "'', validname, valid@example.com, Invalid name",
-                "validname, '', valid@example.com, Invalid name",
-                "validname, validname, invalid-email, Invalid email",
-                "validname, validname, @example.com, Invalid email",
-                "validname, validname, test@, Invalid email"
+                "'', validname, valid@example.com, First name",
+                "validname, '', valid@example.com, Last name",
+                "validname, validname, invalid-email, Email",
+                "validname, validname, @example.com, Email",
+                "validname, validname, test@, Email"
         })
         @DisplayName("Constructor should throw exception for invalid data")
         void testConstructorWithInvalidData(String firstName, String lastName, String email, String expectedMessagePart) {
@@ -58,7 +58,7 @@ class PersonTest {
             String actualEmail = "null".equals(email) ? null : email;
 
             InvalidDataException exception = assertThrows(InvalidDataException.class,
-                    () -> new Person(actualFirst, actualLast, actualEmail),
+                    () -> Person.createValidPerson(actualFirst, actualLast, actualEmail),
                     () -> String.format("Expected InvalidDataException for: firstName='%s', lastName='%s', email='%s'",
                             actualFirst, actualLast, actualEmail));
 

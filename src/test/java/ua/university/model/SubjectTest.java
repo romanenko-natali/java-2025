@@ -9,6 +9,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.assertj.core.api.SoftAssertions;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ua.university.exception.InvalidDataException;
@@ -54,21 +56,24 @@ public class SubjectTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "Very long subject name that exceeds the maximum allowed length limit of one hundred characters which should fail validation"})
-    void testInvalidSubjectNames(String invalidName) {
+    @CsvSource(value = {
+            "'', 'Subject name cannot be null or blank'",
+            "'   ', 'Subject name cannot be null or blank'",
+            "'Very long subject name that exceeds the maximum allowed length limit of one hundred characters which should fail validation', 'Subject name must be 1-100 characters long'"
+    }, delimiter = ',')
+    void testInvalidSubjectNames(String invalidName, String expectedMessagePart) {
         InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-            new Subject(invalidName, 3);
+            Subject.createValidSubject(invalidName, 3);
         });
-        assertTrue(exception.getMessage().contains("Invalid subject name"));
+        assertTrue(exception.getMessage().contains(expectedMessagePart));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, -1, 6, 10, 100})
     void testInvalidSubjectCredits(int invalidCredits) {
-        InvalidDataException exception = assertThrows(InvalidDataException.class, () -> {
-            new Subject("Physics", invalidCredits);
-        });
-        assertTrue(exception.getMessage().contains("Invalid credit amount"));
+        assertThatThrownBy(() -> Subject.createValidSubject("Physics", invalidCredits))
+                .isInstanceOf(InvalidDataException.class)
+                .hasMessageContaining("credits");
     }
 
     @ParameterizedTest
