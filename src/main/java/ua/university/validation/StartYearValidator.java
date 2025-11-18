@@ -10,7 +10,7 @@ public class StartYearValidator implements ConstraintValidator<ValidStartYear, I
     @Override
     public boolean isValid(Integer year, ConstraintValidatorContext context) {
         if (year == null) {
-            return false;
+            return true;
         }
 
         int currentYear = LocalDate.now().getYear();

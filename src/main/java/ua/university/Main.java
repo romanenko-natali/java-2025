@@ -8,6 +8,7 @@ import ua.university.exception.DataSerializationException;
 import ua.university.repository.GenericRepository;
 import ua.university.serializer.DataSerializer;
 import ua.university.serializer.JsonDataSerializer;
+import ua.university.util.ValidationUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +23,9 @@ public class Main {
 
         try {
 
-            Group g = new Group(23, "kkk", 78);
+//            Group g = new Group(23, "kkk", 78);
+            Group g = Group.createValidGroup(23, "", 0);
+//            ValidationUtils.validate(g);
         }
         catch (InvalidDataException e){
             System.out.println(e.getMessage());
