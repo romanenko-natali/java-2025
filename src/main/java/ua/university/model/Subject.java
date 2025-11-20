@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.university.util.ValidationUtils;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record Subject(
         @NotBlank(message = "Subject name cannot be null or blank")
@@ -32,6 +36,11 @@ public record Subject(
     }
 
     public String getDifficultyLevel() {
+        try {
+            Thread.sleep(Duration.of(100, ChronoUnit.MILLIS));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         String difficulty = switch (credits) {
             case 1, 2 -> "Easy";
             case 3, 4 -> "Medium";

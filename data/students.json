@@ -1,0 +1,602 @@
+[
+  {
+    "firstName": "Дмитро",
+    "lastName": "Кравченко",
+    "email": "d.kravchenko@student.ua",
+    "studentId": "KBN101",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Анна",
+    "lastName": "Литвиненко",
+    "email": "a.lytvynenko@student.ua",
+    "studentId": "KBN102",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Максим",
+    "lastName": "Ткаченко",
+    "email": "m.tkachenko@student.ua",
+    "studentId": "KBN103",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Олена",
+    "lastName": "Шевченко",
+    "email": "o.shevchenko@student.ua",
+    "studentId": "KBN104",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Іван",
+    "lastName": "Бондаренко",
+    "email": "i.bondarenko@student.ua",
+    "studentId": "KBN105",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Марія",
+    "lastName": "Коваленко",
+    "email": "m.kovalenko@student.ua",
+    "studentId": "KBN201",
+    "group": {
+      "number": 2,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Петро",
+    "lastName": "Мельник",
+    "email": "p.melnyk@student.ua",
+    "studentId": "KBN202",
+    "group": {
+      "number": 2,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Наталія",
+    "lastName": "Сидоренко",
+    "email": "n.sydorenko@student.ua",
+    "studentId": "KBN203",
+    "group": {
+      "number": 2,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Олексій",
+    "lastName": "Петренко",
+    "email": "o.petrenko@student.ua",
+    "studentId": "KBN204",
+    "group": {
+      "number": 2,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Тетяна",
+    "lastName": "Іваненко",
+    "email": "t.ivanenko@student.ua",
+    "studentId": "KBN205",
+    "group": {
+      "number": 2,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Юлія",
+    "lastName": "Павленко",
+    "email": "y.pavlenko@student.ua",
+    "studentId": "PMT101",
+    "group": {
+      "number": 1,
+      "specialty": "Прикладна математика",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Олег",
+    "lastName": "Гончаренко",
+    "email": "o.honcharenko@student.ua",
+    "studentId": "PMT102",
+    "group": {
+      "number": 1,
+      "specialty": "Прикладна математика",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Світлана",
+    "lastName": "Кузьменко",
+    "email": "s.kuzmenko@student.ua",
+    "studentId": "PMT103",
+    "group": {
+      "number": 1,
+      "specialty": "Прикладна математика",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Андрій",
+    "lastName": "Лисенко",
+    "email": "a.lysenko@student.ua",
+    "studentId": "PMT104",
+    "group": {
+      "number": 1,
+      "specialty": "Прикладна математика",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Вероніка",
+    "lastName": "Савченко",
+    "email": "v.savchenko@student.ua",
+    "studentId": "PMT105",
+    "group": {
+      "number": 1,
+      "specialty": "Прикладна математика",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Катерина",
+    "lastName": "Романенко",
+    "email": "k.romanenko@student.ua",
+    "studentId": "PMT301",
+    "group": {
+      "number": 2,
+      "specialty": "Прикладна математика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Богдан",
+    "lastName": "Яковенко",
+    "email": "b.yakovenko@student.ua",
+    "studentId": "PMT302",
+    "group": {
+      "number": 2,
+      "specialty": "Прикладна математика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Ірина",
+    "lastName": "Полякова",
+    "email": "i.polyakova@student.ua",
+    "studentId": "PMT303",
+    "group": {
+      "number": 2,
+      "specialty": "Прикладна математика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Роман",
+    "lastName": "Григоренко",
+    "email": "r.hryhorenko@student.ua",
+    "studentId": "PMT304",
+    "group": {
+      "number": 2,
+      "specialty": "Прикладна математика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Оксана",
+    "lastName": "Федоренко",
+    "email": "o.fedorenko@student.ua",
+    "studentId": "PMT305",
+    "group": {
+      "number": 2,
+      "specialty": "Прикладна математика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Сергій",
+    "lastName": "Захарченко",
+    "email": "s.zakharchenko@student.ua",
+    "studentId": "INF201",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Вікторія",
+    "lastName": "Марченко",
+    "email": "v.marchenko@student.ua",
+    "studentId": "INF202",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Денис",
+    "lastName": "Карпенко",
+    "email": "d.karpenko@student.ua",
+    "studentId": "INF203",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Людмила",
+    "lastName": "Тимченко",
+    "email": "l.tymchenko@student.ua",
+    "studentId": "INF204",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Артем",
+    "lastName": "Назаренко",
+    "email": "a.nazarenko@student.ua",
+    "studentId": "INF205",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Валентина",
+    "lastName": "Олійник",
+    "email": "v.oliinyk@student.ua",
+    "studentId": "KBN301",
+    "group": {
+      "number": 3,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Микола",
+    "lastName": "Левченко",
+    "email": "m.levchenko@student.ua",
+    "studentId": "KBN302",
+    "group": {
+      "number": 3,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Галина",
+    "lastName": "Морозова",
+    "email": "h.morozova@student.ua",
+    "studentId": "KBN303",
+    "group": {
+      "number": 3,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Василь",
+    "lastName": "Ткачук",
+    "email": "v.tkachuk@student.ua",
+    "studentId": "KBN304",
+    "group": {
+      "number": 3,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Зоя",
+    "lastName": "Герасименко",
+    "email": "z.herasymenko@student.ua",
+    "studentId": "KBN305",
+    "group": {
+      "number": 3,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Євген",
+    "lastName": "Власенко",
+    "email": "y.vlasenko@student.ua",
+    "studentId": "INF301",
+    "group": {
+      "number": 2,
+      "specialty": "Інформатика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Надія",
+    "lastName": "Кравчук",
+    "email": "n.kravchuk@student.ua",
+    "studentId": "INF302",
+    "group": {
+      "number": 2,
+      "specialty": "Інформатика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Тарас",
+    "lastName": "Демченко",
+    "email": "t.demchenko@student.ua",
+    "studentId": "INF303",
+    "group": {
+      "number": 2,
+      "specialty": "Інформатика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Алла",
+    "lastName": "Юрченко",
+    "email": "a.yurchenko@student.ua",
+    "studentId": "INF304",
+    "group": {
+      "number": 2,
+      "specialty": "Інформатика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Станіслав",
+    "lastName": "Панченко",
+    "email": "s.panchenko@student.ua",
+    "studentId": "INF305",
+    "group": {
+      "number": 2,
+      "specialty": "Інформатика",
+      "startYear": 2023
+    }
+  },
+  {
+    "firstName": "Лариса",
+    "lastName": "Степаненко",
+    "email": "l.stepanenko@student.ua",
+    "studentId": "PMT201",
+    "group": {
+      "number": 3,
+      "specialty": "Прикладна математика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Віталій",
+    "lastName": "Руденко",
+    "email": "v.rudenko@student.ua",
+    "studentId": "PMT202",
+    "group": {
+      "number": 3,
+      "specialty": "Прикладна математика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Олександра",
+    "lastName": "Литвин",
+    "email": "o.lytvyn@student.ua",
+    "studentId": "PMT203",
+    "group": {
+      "number": 3,
+      "specialty": "Прикладна математика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Геннадій",
+    "lastName": "Клименко",
+    "email": "h.klymenko@student.ua",
+    "studentId": "PMT204",
+    "group": {
+      "number": 3,
+      "specialty": "Прикладна математика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Раїса",
+    "lastName": "Даниленко",
+    "email": "r.danylenko@student.ua",
+    "studentId": "PMT205",
+    "group": {
+      "number": 3,
+      "specialty": "Прикладна математика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Ярослав",
+    "lastName": "Семенко",
+    "email": "y.semenko@student.ua",
+    "studentId": "KBN106",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Діана",
+    "lastName": "Антоненко",
+    "email": "d.antonenko@student.ua",
+    "studentId": "KBN107",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Павло",
+    "lastName": "Зайченко",
+    "email": "p.zaichenko@student.ua",
+    "studentId": "KBN108",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Христина",
+    "lastName": "Василенко",
+    "email": "kh.vasylenko@student.ua",
+    "studentId": "KBN109",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Леонід",
+    "lastName": "Гнатенко",
+    "email": "l.hnatenko@student.ua",
+    "studentId": "KBN110",
+    "group": {
+      "number": 1,
+      "specialty": "Комп'ютерні науки",
+      "startYear": 2021
+    }
+  },
+  {
+    "firstName": "Софія",
+    "lastName": "Остапенко",
+    "email": "s.ostapenko@student.ua",
+    "studentId": "INF206",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Григорій",
+    "lastName": "Хоменко",
+    "email": "h.khomenko@student.ua",
+    "studentId": "INF207",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Емма",
+    "lastName": "Прокопенко",
+    "email": "e.prokopenko@student.ua",
+    "studentId": "INF208",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Руслан",
+    "lastName": "Діденко",
+    "email": "r.didenko@student.ua",
+    "studentId": "INF209",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {
+    "firstName": "Аліна",
+    "lastName": "Макаренко",
+    "email": "a.makarenko@student.ua",
+    "studentId": "INF210",
+    "group": {
+      "number": 1,
+      "specialty": "Інформатика",
+      "startYear": 2022
+    }
+  },
+  {"firstName": "Володимир", "lastName": "Бойко", "email": "v.boyko@student.ua", "studentId": "KBN111", "group": {"number": 1, "specialty": "Комп'ютерні науки", "startYear": 2021}},
+  {"firstName": "Яна", "lastName": "Сергієнко", "email": "y.serhiienko@student.ua", "studentId": "KBN112", "group": {"number": 1, "specialty": "Комп'ютерні науки", "startYear": 2021}},
+  {"firstName": "Антон", "lastName": "Мороз", "email": "a.moroz@student.ua", "studentId": "KBN206", "group": {"number": 2, "specialty": "Комп'ютерні науки", "startYear": 2022}},
+  {"firstName": "Поліна", "lastName": "Кириленко", "email": "p.kyrylenko@student.ua", "studentId": "KBN207", "group": {"number": 2, "specialty": "Комп'ютерні науки", "startYear": 2022}},
+  {"firstName": "Данило", "lastName": "Швець", "email": "d.shvets@student.ua", "studentId": "KBN208", "group": {"number": 2, "specialty": "Комп'ютерні науки", "startYear": 2022}},
+  {"firstName": "Єлизавета", "lastName": "Коломієць", "email": "y.kolomiiets@student.ua", "studentId": "KBN209", "group": {"number": 2, "specialty": "Комп'ютерні науки", "startYear": 2022}},
+  {"firstName": "Матвій", "lastName": "Пономаренко", "email": "m.ponomarenko@student.ua", "studentId": "KBN210", "group": {"number": 2, "specialty": "Комп'ютерні науки", "startYear": 2022}},
+  {"firstName": "Анастасія", "lastName": "Ярошенко", "email": "a.yaroshenko@student.ua", "studentId": "KBN306", "group": {"number": 3, "specialty": "Комп'ютерні науки", "startYear": 2023}},
+  {"firstName": "Кирило", "lastName": "Білоус", "email": "k.bilous@student.ua", "studentId": "KBN307", "group": {"number": 3, "specialty": "Комп'ютерні науки", "startYear": 2023}},
+  {"firstName": "Дарина", "lastName": "Гордієнко", "email": "d.hordiienko@student.ua", "studentId": "KBN308", "group": {"number": 3, "specialty": "Комп'ютерні науки", "startYear": 2023}},
+  {"firstName": "Ілля", "lastName": "Савчук", "email": "i.savchuk@student.ua", "studentId": "PMT106", "group": {"number": 1, "specialty": "Прикладна математика", "startYear": 2021}},
+  {"firstName": "Вероніка", "lastName": "Таран", "email": "v.taran@student.ua", "studentId": "PMT107", "group": {"number": 1, "specialty": "Прикладна математика", "startYear": 2021}},
+  {"firstName": "Назар", "lastName": "Гаврилюк", "email": "n.havryliuk@student.ua", "studentId": "PMT108", "group": {"number": 1, "specialty": "Прикладна математика", "startYear": 2021}},
+  {"firstName": "Злата", "lastName": "Костенко", "email": "z.kostenko@student.ua", "studentId": "PMT109", "group": {"number": 1, "specialty": "Прикладна математика", "startYear": 2021}},
+  {"firstName": "Арсен", "lastName": "Нечипоренко", "email": "a.nechyporenko@student.ua", "studentId": "PMT110", "group": {"number": 1, "specialty": "Прикладна математика", "startYear": 2021}},
+  {"firstName": "Мілана", "lastName": "Дорошенко", "email": "m.doroshenko@student.ua", "studentId": "PMT206", "group": {"number": 3, "specialty": "Прикладна математика", "startYear": 2022}},
+  {"firstName": "Тимофій", "lastName": "Черненко", "email": "t.chernenko@student.ua", "studentId": "PMT207", "group": {"number": 3, "specialty": "Прикладна математика", "startYear": 2022}},
+  {"firstName": "Ангеліна", "lastName": "Фоменко", "email": "a.fomenko@student.ua", "studentId": "PMT208", "group": {"number": 3, "specialty": "Прикладна математика", "startYear": 2022}},
+  {"firstName": "Марк", "lastName": "Луценко", "email": "m.lutsenko@student.ua", "studentId": "PMT209", "group": {"number": 3, "specialty": "Прикладна математика", "startYear": 2022}},
+  {"firstName": "Соломія", "lastName": "Приходько", "email": "s.prykhodko@student.ua", "studentId": "PMT210", "group": {"number": 3, "specialty": "Прикладна математика", "startYear": 2022}},
+  {"firstName": "Давид", "lastName": "Вовк", "email": "d.vovk@student.ua", "studentId": "PMT306", "group": {"number": 2, "specialty": "Прикладна математика", "startYear": 2023}},
+  {"firstName": "Каріна", "lastName": "Олексієнко", "email": "k.oleksiienko@student.ua", "studentId": "PMT307", "group": {"number": 2, "specialty": "Прикладна математика", "startYear": 2023}},
+  {"firstName": "Нікіта", "lastName": "Кучеренко", "email": "n.kucherenko@student.ua", "studentId": "PMT308", "group": {"number": 2, "specialty": "Прикладна математика", "startYear": 2023}},
+  {"firstName": "Аріна", "lastName": "Гриценко", "email": "a.hrytsenko@student.ua", "studentId": "PMT309", "group": {"number": 2, "specialty": "Прикладна математика", "startYear": 2023}},
+  {"firstName": "Глеб", "lastName": "Литвиненко", "email": "h.lytvynenko@student.ua", "studentId": "PMT310", "group": {"number": 2, "specialty": "Прикладна математика", "startYear": 2023}},
+  {"firstName": "Ева", "lastName": "Шульга", "email": "e.shulha@student.ua", "studentId": "INF211", "group": {"number": 1, "specialty": "Інформатика", "startYear": 2022}},
+  {"firstName": "Олексій", "lastName": "Бондар", "email": "o.bondar@student.ua", "studentId": "INF212", "group": {"number": 1, "specialty": "Інформатика", "startYear": 2022}},
+  {"firstName": "Вероніка", "lastName": "Ніколенко", "email": "v.nikolenko@student.ua", "studentId": "INF213", "group": {"number": 1, "specialty": "Інформатика", "startYear": 2022}},
+  {"firstName": "Максим", "lastName": "Поліщук", "email": "m.polishchuk@student.ua", "studentId": "INF214", "group": {"number": 1, "specialty": "Інформатика", "startYear": 2022}},
+  {"firstName": "Юлія", "lastName": "Сиротенко", "email": "y.syrotenko@student.ua", "studentId": "INF215", "group": {"number": 1, "specialty": "Інформатика", "startYear": 2022}},
+  {"firstName": "Роман", "lastName": "Андрієнко", "email": "r.andriienko@student.ua", "studentId": "INF306", "group": {"number": 2, "specialty": "Інформатика", "startYear": 2023}},
+  {"firstName": "Софія", "lastName": "Калініченко", "email": "s.kalinichenko@student.ua", "studentId": "INF307", "group": {"number": 2, "specialty": "Інформатика", "startYear": 2023}},
+  {"firstName": "Тимур", "lastName": "Федченко", "email": "t.fedchenko@student.ua", "studentId": "INF308", "group": {"number": 2, "specialty": "Інформатика", "startYear": 2023}},
+  {"firstName": "Вікторія", "lastName": "Романюк", "email": "v.romaniuk@student.ua", "studentId": "INF309", "group": {"number": 2, "specialty": "Інформатика", "startYear": 2023}},
+  {"firstName": "Артем", "lastName": "Пилипенко", "email": "a.pylypenko@student.ua", "studentId": "INF310", "group": {"number": 2, "specialty": "Інформатика", "startYear": 2023}},
+  {"firstName": "Мирослава", "lastName": "Захаренко", "email": "m.zakharenko@student.ua", "studentId": "KBN401", "group": {"number": 4, "specialty": "Комп'ютерні науки", "startYear": 2024}},
+  {"firstName": "Олег", "lastName": "Терещенко", "email": "o.tereshchenko@student.ua", "studentId": "KBN402", "group": {"number": 4, "specialty": "Комп'ютерні науки", "startYear": 2024}},
+  {"firstName": "Діана", "lastName": "Михайленко", "email": "d.mykhailenko@student.ua", "studentId": "KBN403", "group": {"number": 4, "specialty": "Комп'ютерні науки", "startYear": 2024}},
+  {"firstName": "Владислав", "lastName": "Корнієнко", "email": "v.korniienko@student.ua", "studentId": "KBN404", "group": {"number": 4, "specialty": "Комп'ютерні науки", "startYear": 2024}},
+  {"firstName": "Анна", "lastName": "Сидоренко", "email": "a.sydorenko@student.ua", "studentId": "KBN405", "group": {"number": 4, "specialty": "Комп'ютерні науки", "startYear": 2024}},
+  {"firstName": "Богдан", "lastName": "Остапчук", "email": "b.ostapchuk@student.ua", "studentId": "PMT401", "group": {"number": 4, "specialty": "Прикладна математика", "startYear": 2024}},
+  {"firstName": "Катерина", "lastName": "Левицька", "email": "k.levytska@student.ua", "studentId": "PMT402", "group": {"number": 4, "specialty": "Прикладна математика", "startYear": 2024}},
+  {"firstName": "Ігор", "lastName": "Павлюк", "email": "i.pavliuk@student.ua", "studentId": "PMT403", "group": {"number": 4, "specialty": "Прикладна математика", "startYear": 2024}},
+  {"firstName": "Олена", "lastName": "Кравець", "email": "o.kravets@student.ua", "studentId": "PMT404", "group": {"number": 4, "specialty": "Прикладна математика", "startYear": 2024}},
+  {"firstName": "Микита", "lastName": "Харченко", "email": "m.kharchenko@student.ua", "studentId": "PMT405", "group": {"number": 4, "specialty": "Прикладна математика", "startYear": 2024}},
+  {"firstName": "Тетяна", "lastName": "Ковальчук", "email": "t.kovalchuk@student.ua", "studentId": "INF401", "group": {"number": 3, "specialty": "Інформатика", "startYear": 2024}},
+  {"firstName": "Андрій", "lastName": "Мельничук", "email": "a.melnychuk@student.ua", "studentId": "INF402", "group": {"number": 3, "specialty": "Інформатика", "startYear": 2024}},
+  {"firstName": "Марія", "lastName": "Петрук", "email": "m.petruk@student.ua", "studentId": "INF403", "group": {"number": 3, "specialty": "Інформатика", "startYear": 2024}},
+  {"firstName": "Сергій", "lastName": "Ющенко", "email": "s.yushchenko@student.ua", "studentId": "INF404", "group": {"number": 3, "specialty": "Інформатика", "startYear": 2024}},
+  {"firstName": "Наталя", "lastName": "Бондаренко", "email": "n.bondarenko@student.ua", "studentId": "INF405", "group": {"number": 3, "specialty": "Інформатика", "startYear": 2024}}
+]

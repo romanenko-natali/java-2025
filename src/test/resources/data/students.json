@@ -1,0 +1,16 @@
+[
+  {
+    "firstName": "Дмитро",
+    "lastName": "Кравченко",
+    "email": "d.kravchenko@student.ua",
+    "studentId": "KBN101",
+    "group": {"number": 1, "specialty": "Комп'ютерні науки", "startYear": 2021}
+  },
+  {
+    "firstName": "Анна",
+    "lastName": "Литвиненко",
+    "email": "a.lytvynenko@student.ua",
+    "studentId": "KBN102",
+    "group": {"number": 1, "specialty": "Комп'ютерні науки", "startYear": 2021}
+  }
+]

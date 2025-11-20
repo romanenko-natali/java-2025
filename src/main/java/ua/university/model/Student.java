@@ -1,5 +1,7 @@
 package ua.university.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,6 +106,18 @@ public class Student extends Person {
 
         ValidationUtils.validate(student);
         logger.info("Factory method: created Student with id='{}'", studentId);
+        return student;
+    }
+
+    @JsonCreator
+    public static Student fromJson(
+            @JsonProperty("firstName") String firstName,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("email") String email,
+            @JsonProperty("studentId") String studentId,
+            @JsonProperty("group") Group group) {
+        Student student = new Student(firstName, lastName, email, studentId, group);
+        ValidationUtils.validate(student);
         return student;
     }
 

@@ -42,8 +42,8 @@ public class Teacher extends Person {
             @JsonProperty("department") String department,
             @JsonProperty("position") String position) {
         super(firstName, lastName, email);
-        setDepartment(department);
-        setPosition(position);
+        this.department = department;
+        this.position = position;
         logger.info("Created Teacher: {}", this);
     }
 

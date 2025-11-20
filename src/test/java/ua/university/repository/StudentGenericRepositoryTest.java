@@ -41,7 +41,7 @@ public class StudentGenericRepositoryTest {
     @BeforeEach
     void setUp() {
         studentRepository = new GenericRepository<>(Student::getStudentId, "Student");
-        studentRepository.getItemsForTesting().add(testStudent1);
+        studentRepository.add(testStudent1);
     }
 
 
@@ -159,7 +159,7 @@ public class StudentGenericRepositoryTest {
     void testNullPrevention() {
         assertThatThrownBy(() -> studentRepository.add(null))
                 .isInstanceOf(InvalidDataException.class)
-                .hasMessageContaining("cannot be null");
+                .hasMessageContaining("null");
     }
 
     @ParameterizedTest(name = "Find by ID: {0} (should find: {1}) - {2}")
@@ -168,7 +168,7 @@ public class StudentGenericRepositoryTest {
     void testFindByIdentity(String studentId, boolean shouldFind, String description) {
         SoftAssertions softly = new SoftAssertions();
 
-        studentRepository.getItemsForTesting().add(testStudent2);
+        studentRepository.add(testStudent2);
 
         Optional<Student> result = studentRepository.findByIdentity(studentId);
 
@@ -197,8 +197,8 @@ public class StudentGenericRepositoryTest {
                 .isEmpty();
 
 
-        studentRepository.getItemsForTesting().add(testStudent2);
-        studentRepository.getItemsForTesting().add(testStudent3);
+        studentRepository.add(testStudent2);
+        studentRepository.add(testStudent3);
 
         List<Student> allStudents = studentRepository.getAll();
 

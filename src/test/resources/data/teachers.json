@@ -1,0 +1,16 @@
+[
+  {
+    "firstName": "Олександр",
+    "lastName": "Петренко",
+    "email": "o.petrenko@university.ua",
+    "department": "Комп'ютерних наук",
+    "position": "Професор"
+  },
+  {
+    "firstName": "Марія",
+    "lastName": "Коваленко",
+    "email": "m.kovalenko@university.ua",
+    "department": "Математики",
+    "position": "Доцент"
+  }
+]

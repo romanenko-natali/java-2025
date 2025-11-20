@@ -1,0 +1,44 @@
+[
+  {
+    "firstName": "Олександр",
+    "lastName": "Петренко",
+    "email": "o.petrenko@university.ua",
+    "department": "Комп'ютерних наук",
+    "position": "Професор"
+  },
+  {
+    "firstName": "Марія",
+    "lastName": "Коваленко",
+    "email": "m.kovalenko@university.ua",
+    "department": "Комп'ютерних наук",
+    "position": "Доцент"
+  },
+  {
+    "firstName": "Іван",
+    "lastName": "Шевченко",
+    "email": "i.shevchenko@university.ua",
+    "department": "Математичного аналізу",
+    "position": "Професор"
+  },
+  {
+    "firstName": "Наталія",
+    "lastName": "Бондаренко",
+    "email": "n.bondarenko@university.ua",
+    "department": "Математичного аналізу",
+    "position": "Доцент"
+  },
+  {
+    "firstName": "Андрій",
+    "lastName": "Мельник",
+    "email": "a.melnyk@university.ua",
+    "department": "Програмної інженерії",
+    "position": "Старший викладач"
+  },
+  {
+    "firstName": "Олена",
+    "lastName": "Сидоренко",
+    "email": "o.sydorenko@university.ua",
+    "department": "Комп'ютерних наук",
+    "position": "Асистент"
+  }
+]
