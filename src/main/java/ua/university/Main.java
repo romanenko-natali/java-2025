@@ -44,10 +44,10 @@ public class Main {
                 subjectRepository
         );
 
-//        demonstratePerformanceComparison(
-//                studentRepository,
-//                subjectRepository
-//        );
+        demonstratePerformanceComparison(
+                studentRepository,
+                subjectRepository
+        );
 
     }
 
