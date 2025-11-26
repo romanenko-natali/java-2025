@@ -7,7 +7,6 @@ import ua.university.model.Group;
 import ua.university.model.Teacher;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Repository for managing Course objects with specialized search methods
@@ -34,6 +33,47 @@ public class CourseRepository extends GenericRepository<Course> {
                 .toList();
 
         logger.info("Found {} course(s) with subject name: {}", results.size(), subjectName);
+        return results;
+    }
+
+    /**
+     * Find courses by teacher name (partial match on first name or last name, case-insensitive)
+     */
+    public List<Course> findByTeacher(String teacherNamePart) {
+        if (teacherNamePart == null || teacherNamePart.isBlank()) {
+            logger.warn("Attempted to find courses with null/blank teacher name");
+            return List.of();
+        }
+
+        String searchTerm = teacherNamePart.trim().toLowerCase();
+        List<Course> results = items.stream()
+                .filter(course -> {
+                    Teacher teacher = course.getTeacher();
+                    return teacher.getFirstName().toLowerCase().contains(searchTerm) ||
+                            teacher.getLastName().toLowerCase().contains(searchTerm);
+                })
+                .toList();
+
+        logger.info("Found {} course(s) with teacher name containing: {}", results.size(), teacherNamePart);
+        return results;
+    }
+
+    /**
+     * Find courses by group full name (partial match, case-insensitive)
+     * Searches in group's fullName (e.g., "CS01-23")
+     */
+    public List<Course> findByGroup(String groupNamePart) {
+        if (groupNamePart == null || groupNamePart.isBlank()) {
+            logger.warn("Attempted to find courses with null/blank group name");
+            return List.of();
+        }
+
+        String searchTerm = groupNamePart.trim().toLowerCase();
+        List<Course> results = items.stream()
+                .filter(course -> course.getGroup().getFullName().toLowerCase().contains(searchTerm))
+                .toList();
+
+        logger.info("Found {} course(s) with group name containing: {}", results.size(), groupNamePart);
         return results;
     }
 

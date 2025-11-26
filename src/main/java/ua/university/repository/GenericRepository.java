@@ -112,6 +112,34 @@ public class GenericRepository<T> {
     }
 
     /**
+     * Update an existing item (thread-safe)
+     * Finds item by identity extracted from newItem and replaces it
+     *
+     * @param newItem New item to replace with
+     * @return true if updated, false if item not found
+     * @throws InvalidDataException if newItem is null
+     */
+    public synchronized boolean update(T newItem) {
+        if (newItem == null) {
+            throw new InvalidDataException(entityType + " cannot be null");
+        }
+
+        String identity = identityExtractor.extractIdentity(newItem);
+        Optional<T> existingItem = findByIdentityInternal(identity);
+
+        if (existingItem.isEmpty()) {
+            logger.warn("Cannot update: {} not found with identity: {}", entityType, identity);
+            return false;
+        }
+
+        items.remove(existingItem.get());
+        items.add(newItem);
+
+        logger.info("Updated {}: {}", entityType, identity);
+        return true;
+    }
+
+    /**
      * Check if repository contains an item using equals()
      */
     public boolean contains(T item) {

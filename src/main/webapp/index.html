@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #007bff;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #28a745;
+            color: white;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+        .method.post { background: #ffc107; color: #333; }
+        .method.put { background: #17a2b8; }
+        .method.delete { background: #dc3545; }
+        .description {
+            color: #666;
+            font-family: 'Segoe UI', sans-serif;
+            margin-left: 10px;
+        }
+        .filter {
+            border-left-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🎓 Student Management API</h1>
+    <p>RESTful API for managing students, teachers, groups, subjects, and courses.</p>
+
+    <h2>🧪 Test</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/test" target="_blank">/api/test</a>
+        <span class="description">- Check if application is running</span>
+    </div>
+
+    <h2>📚 Students</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/students" target="_blank">/api/students</a>
+        <span class="description">- Get all students</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/students/STU001" target="_blank">/api/students/{id}</a>
+        <span class="description">- Get student by ID</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/students
+        <span class="description">- Create new student</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/students/{id}
+        <span class="description">- Update student</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/students/{id}
+        <span class="description">- Delete student</span>
+    </div>
+
+    <h2>👨‍🏫 Teachers</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/teachers" target="_blank">/api/teachers</a>
+        <span class="description">- Get all teachers</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/teachers?department=Computer" target="_blank">/api/teachers?department=X</a>
+        <span class="description">- Filter by department (partial match)</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        /api/teachers/{email}
+        <span class="description">- Get teacher by email</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/teachers
+        <span class="description">- Create new teacher</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/teachers/{email}
+        <span class="description">- Update teacher</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/teachers/{email}
+        <span class="description">- Delete teacher</span>
+    </div>
+
+    <h2>👥 Groups</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/groups" target="_blank">/api/groups</a>
+        <span class="description">- Get all groups</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/groups?specialty=Computer" target="_blank">/api/groups?specialty=X</a>
+        <span class="description">- Filter by specialty (partial match)</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/groups?number=1" target="_blank">/api/groups?number=X</a>
+        <span class="description">- Filter by group number</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/groups?active=true" target="_blank">/api/groups?active=true</a>
+        <span class="description">- Get active groups only</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/groups?graduated=true" target="_blank">/api/groups?graduated=true</a>
+        <span class="description">- Get graduated groups only</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        /api/groups/{fullName}
+        <span class="description">- Get group by full name (e.g., CS01-23)</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/groups
+        <span class="description">- Create new group</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/groups/{fullName}
+        <span class="description">- Update group</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/groups/{fullName}
+        <span class="description">- Delete group</span>
+    </div>
+
+    <h2>📖 Subjects</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/subjects" target="_blank">/api/subjects</a>
+        <span class="description">- Get all subjects</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/subjects?minCredits=2&maxCredits=4" target="_blank">/api/subjects?minCredits=X&maxCredits=Y</a>
+        <span class="description">- Filter by credits range</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        /api/subjects/{name}
+        <span class="description">- Get subject by name</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/subjects
+        <span class="description">- Create new subject</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/subjects/{name}
+        <span class="description">- Update subject</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/subjects/{name}
+        <span class="description">- Delete subject</span>
+    </div>
+
+    <h2>🎯 Courses</h2>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        <a href="/api/courses" target="_blank">/api/courses</a>
+        <span class="description">- Get all courses</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        <a href="/api/courses?subject=Math" target="_blank">/api/courses?subject=X</a>
+        <span class="description">- Filter by subject name</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        /api/courses?teacher=X
+        <span class="description">- Filter by teacher name (partial match)</span>
+    </div>
+    <div class="endpoint filter">
+        <span class="method">GET</span>
+        /api/courses?group=X
+        <span class="description">- Filter by group name (partial match)</span>
+    </div>
+    <div class="endpoint">
+        <span class="method">GET</span>
+        /api/courses/{identity}
+        <span class="description">- Get course by identity</span>
+    </div>
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        /api/courses
+        <span class="description">- Create new course</span>
+    </div>
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        /api/courses/{identity}
+        <span class="description">- Update course</span>
+    </div>
+    <div class="endpoint">
+        <span class="method delete">DELETE</span>
+        /api/courses/{identity}
+        <span class="description">- Delete course</span>
+    </div>
+
+    <hr style="margin: 30px 0;">
+    <p><small>Built with Java Servlets, Jackson, SLF4J/Logback</small></p>
+</div>
+</body>
+</html>

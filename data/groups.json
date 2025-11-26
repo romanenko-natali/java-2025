@@ -1,27 +1,21 @@
-[
-  {
-    "number": 1,
-    "specialty": "Комп'ютерні науки",
-    "startYear": 2021
-  },
-  {
-    "number": 2,
-    "specialty": "Комп'ютерні науки",
-    "startYear": 2022
-  },
-  {
-    "number": 1,
-    "specialty": "Прикладна математика",
-    "startYear": 2021
-  },
-  {
-    "number": 2,
-    "specialty": "Прикладна математика",
-    "startYear": 2023
-  },
-  {
-    "number": 1,
-    "specialty": "Інформатика",
-    "startYear": 2022
-  }
-]
+[ {
+  "number" : 1,
+  "specialty" : "Комп'ютерні науки",
+  "startYear" : 2021
+}, {
+  "number" : 2,
+  "specialty" : "Комп'ютерні науки",
+  "startYear" : 2022
+}, {
+  "number" : 1,
+  "specialty" : "Прикладна математика",
+  "startYear" : 2021
+}, {
+  "number" : 2,
+  "specialty" : "Прикладна математика",
+  "startYear" : 2023
+}, {
+  "number" : 1,
+  "specialty" : "Інформатика",
+  "startYear" : 2022
+} ]

@@ -2,7 +2,6 @@ package ua.university.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.university.exception.InvalidDataException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -124,7 +123,7 @@ public class AppConfig {
      * @return Base data directory path
      */
     public String getBaseDataPath() {
-        return getProperty("data.path.base", "./data");
+        return getProperty("data.path.base", "src/data");
     }
 
     /**

@@ -1,5 +1,6 @@
 package ua.university.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import ua.university.util.ValidationUtils;
 import ua.university.validation.ValidStartYear;
@@ -35,14 +36,17 @@ public record Group(
         return group;
     }
 
+    @JsonIgnore
     public int getCurrentYear() {
         return LocalDate.now().getYear() - startYear + 1;
     }
 
+    @JsonIgnore
     public String getFullName() {
         return formatGroupFullNumber();
     }
 
+    @JsonIgnore
     public boolean isGraduated() {
         return getCurrentYear() > 4;
     }

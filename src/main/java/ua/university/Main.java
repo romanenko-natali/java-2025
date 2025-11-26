@@ -2,6 +2,7 @@ package ua.university;
 
 import ua.university.config.AppConfig;
 import ua.university.exception.DataSerializationException;
+import ua.university.model.Student;
 import ua.university.model.Teacher;
 import ua.university.persistence.PersistenceManager;
 import ua.university.repository.*;
@@ -28,26 +29,44 @@ public class Main {
         GroupRepository groupRepository = new GroupRepository();
         SubjectRepository subjectRepository = new SubjectRepository();
 
-
-        demonstrateParallelLoading(
-                persistenceManager,
+        DataLoader dataLoader = new DataLoader(persistenceManager);
+        LoadResult executorResult = dataLoader.load(
                 studentRepository,
                 teacherRepository,
                 groupRepository,
-                subjectRepository
+                subjectRepository,
+                new ExecutorLoadingStrategy(4)
         );
+        System.out.println(executorResult);
 
-        demonstrateReportGeneration(
-                studentRepository,
-                teacherRepository,
-                groupRepository,
-                subjectRepository
-        );
+        List<Student> students = studentRepository.getAll();
+        students.get(0).setFirstName("New");
+        try {
+            persistenceManager.save(students, "students", Student.class, "JSON");
+        } catch (DataSerializationException e) {
+            throw new RuntimeException(e);
+        }
 
-        demonstratePerformanceComparison(
-                studentRepository,
-                subjectRepository
-        );
+
+//        demonstrateParallelLoading(
+//                persistenceManager,
+//                studentRepository,
+//                teacherRepository,
+//                groupRepository,
+//                subjectRepository
+//        );
+
+//        demonstrateReportGeneration(
+//                studentRepository,
+//                teacherRepository,
+//                groupRepository,
+//                subjectRepository
+//        );
+
+//        demonstratePerformanceComparison(
+//                studentRepository,
+//                subjectRepository
+//        );
 
     }
 

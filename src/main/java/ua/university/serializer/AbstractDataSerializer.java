@@ -121,4 +121,54 @@ public abstract class AbstractDataSerializer<T> implements DataSerializer<T> {
             }
         }
     }
+
+    @Override
+    public String toString(T item) throws DataSerializationException {
+        if (item == null) {
+            throw new DataSerializationException("Cannot serialize null item");
+        }
+
+        try {
+            String result = objectMapper.writeValueAsString(item);
+            logger.debug("Serialized single item to {} string", getFormat());
+            return result;
+        } catch (IOException e) {
+            String errorMsg = String.format("Failed to serialize item to %s string", getFormat());
+            throw new DataSerializationException(errorMsg, e);
+        }
+    }
+
+    @Override
+    public String listToString(List<T> items) throws DataSerializationException {
+        if (items == null) {
+            throw new DataSerializationException("Cannot serialize null list");
+        }
+
+        try {
+            String result = objectMapper.writeValueAsString(items);
+            logger.debug("Serialized {} items to {} string", items.size(), getFormat());
+            return result;
+        } catch (IOException e) {
+            String errorMsg = String.format("Failed to serialize list to %s string", getFormat());
+            throw new DataSerializationException(errorMsg, e);
+        }
+    }
+
+    @Override
+    public T fromString(String str, Class<T> clazz) throws DataSerializationException {
+        if (str == null || str.trim().isEmpty()) {
+            throw new DataSerializationException("Cannot deserialize null or empty string");
+        }
+
+        validateClass(clazz);
+
+        try {
+            T result = objectMapper.readValue(str, clazz);
+            logger.debug("Deserialized {} item from {} string", clazz.getSimpleName(), getFormat());
+            return result;
+        } catch (IOException e) {
+            String errorMsg = String.format("Failed to deserialize from %s string", getFormat());
+            throw new DataSerializationException(errorMsg, e);
+        }
+    }
 }
